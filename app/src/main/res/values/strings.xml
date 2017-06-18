@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">TasksManagerApplication</string>
+    <string name="textTabTitle1">All</string>
+    <string name="textTabTitle2">Favorite</string>
+    <string name="empty_field">Please, fill the fields</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="remove_from_favorite">Remove from Favorite</string>
+    <string name="add_to_favorite">Add to Favorite</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
+    <string name="menu_button">Menu</string>
+    <string name="save_button">Save</string>
+    <string name="task">Task</string>
+    <string name="settings">Settings</string>
+</resources>
