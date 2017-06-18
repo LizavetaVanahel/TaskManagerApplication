@@ -10,37 +10,36 @@ import android.widget.Button;
 import com.example.vanahel.tasksmanagerapplication.MainActivity;
 import com.example.vanahel.tasksmanagerapplication.NewTaskActivity;
 import com.example.vanahel.tasksmanagerapplication.R;
+import com.example.vanahel.tasksmanagerapplication.constants.ExtrasConstants;
 import com.example.vanahel.tasksmanagerapplication.dao.DAOManager;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
 import java.io.IOException;
 
-/**
- * Created by dvkoleda on 11.06.17.
- */
-
 public class ListItemMenuListener implements View.OnClickListener  {
 
     private Context context;
     private Task task;
-    private int position;
 
-    public ListItemMenuListener (Context context, Task task, int position){
+    public ListItemMenuListener (Context context, Task task){
         this.context = context;
         this.task = task;
-        this.position = position;
     }
 
     public void onClick (View v){
         Button menuButton = (Button) v.findViewById(R.id.list_item_menu_button);
         PopupMenu popup = new PopupMenu(context, menuButton);
-        popup.getMenuInflater().inflate(R.menu.popupmenu, popup.getMenu());
+        if (!task.getFavorite()) {
+            popup.getMenuInflater().inflate(R.menu.popupmenu, popup.getMenu());
+        } else {
+            popup.getMenuInflater().inflate(R.menu.favorite_popupmenu, popup.getMenu());
+        }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.edit:
                         Intent intent = new Intent(context, NewTaskActivity.class);
-                        intent.putExtra("task", task);
+                        intent.putExtra(ExtrasConstants.TASK_EXTRAS, task);
                         context.startActivity(intent);
                         break;
                     case R.id.delete:
@@ -53,17 +52,24 @@ public class ListItemMenuListener implements View.OnClickListener  {
                         context.startActivity(deleteIntent);
                         break;
                     case R.id.addToFavorite:
+                        Intent updateIntent = new Intent(context, MainActivity.class);
                         Task favoriteTask = new Task (task.getTitle(), task.getDescription(), true);
                         try {
                             DAOManager.getInstance().getTaskDAO().updateTask(favoriteTask, task);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        Intent updateIntent = new Intent(context, MainActivity.class);
                         context.startActivity(updateIntent);
                         break;
                     case R.id.delete_from_favorite:
-
+                        Intent deleteFromFavoriteIntent = new Intent(context, MainActivity.class);
+                        Task simpleTask = new Task (task.getTitle(), task.getDescription(), false);
+                        try {
+                            DAOManager.getInstance().getTaskDAO().updateTask(simpleTask, task);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        context.startActivity(deleteFromFavoriteIntent);
                     default:
                         break;
                 }

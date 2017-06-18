@@ -9,27 +9,28 @@ import com.example.vanahel.tasksmanagerapplication.task.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by dvkoleda on 04.06.17.
- */
-
 public class FavoriteAsyncTaskLoader extends AsyncTaskLoader< List<Task> > {
 
     private TaskDAO taskDAO;
-    private Boolean isFavorite;
 
-    public FavoriteAsyncTaskLoader(Context context, TaskDAO taskDAO, boolean isFavorite) {
+    public FavoriteAsyncTaskLoader(Context context, TaskDAO taskDAO) {
         super(context);
         this.taskDAO = taskDAO;
-        this.isFavorite = isFavorite;
-
     }
 
     @Override
     public List<Task> loadInBackground() {
-        List<Task> list = null;
-            list = new ArrayList<>();
-            list.addAll(taskDAO.getFavoriteTasks());
-        return list;
+        List<Task> favoriteTasksList;
+        favoriteTasksList = new ArrayList<>();
+        List<Task> allTasksList;
+        allTasksList = new ArrayList<>();
+        allTasksList.addAll(taskDAO.getTasks());
+
+        for ( Task currentTask : allTasksList ) {
+            if (currentTask.getFavorite()) {
+                favoriteTasksList.add(currentTask);
+            }
+        }
+        return favoriteTasksList;
     }
 }

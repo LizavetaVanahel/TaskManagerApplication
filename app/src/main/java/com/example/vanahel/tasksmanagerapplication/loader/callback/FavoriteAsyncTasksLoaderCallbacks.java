@@ -13,17 +13,14 @@ import com.example.vanahel.tasksmanagerapplication.task.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by dvkoleda on 28.05.17.
- */
-
-public class FavoriteAsyncTasksLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<Task>>  {
+public class FavoriteAsyncTasksLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<Task>> {
 
     private Context context;
     private TaskDAO taskDAO;
     private FavoriteTasksArrayAdapter favoriteTasksArrayAdapter;
 
-    public FavoriteAsyncTasksLoaderCallbacks (Context context, TaskDAO taskDAO, FavoriteTasksArrayAdapter favoriteTasksArrayAdapter){
+    public FavoriteAsyncTasksLoaderCallbacks (Context context, TaskDAO taskDAO,
+                                              FavoriteTasksArrayAdapter favoriteTasksArrayAdapter){
         this.context = context;
         this.taskDAO = taskDAO;
         this.favoriteTasksArrayAdapter = favoriteTasksArrayAdapter;
@@ -31,16 +28,16 @@ public class FavoriteAsyncTasksLoaderCallbacks implements LoaderManager.LoaderCa
 
     @Override
     public Loader<List<Task>> onCreateLoader(int i, Bundle bundle) {
-        return new FavoriteAsyncTaskLoader(context, taskDAO, true);
+        return new FavoriteAsyncTaskLoader(context, taskDAO);
     }
 
     @Override
     public void onLoadFinished(Loader<List<Task>> loader, List<Task> task) {
-        favoriteTasksArrayAdapter.setTask(task);
+        favoriteTasksArrayAdapter.setFavoriteTask(task);
     }
 
     @Override
     public void onLoaderReset(Loader<List<Task>> loader) {
-        favoriteTasksArrayAdapter.setTask(new ArrayList<Task>());
+        favoriteTasksArrayAdapter.setFavoriteTask(new ArrayList<Task>());
     }
 }
