@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TaskDAO {
 
-     void save(String title, String description, Boolean isFavorite);
+     void save(Task task);
 
      List<Task> getTasks ();
 

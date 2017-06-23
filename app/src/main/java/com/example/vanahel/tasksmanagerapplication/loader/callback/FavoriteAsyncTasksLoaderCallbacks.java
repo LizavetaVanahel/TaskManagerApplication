@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Loader;
 import android.os.Bundle;
 
-import com.example.vanahel.tasksmanagerapplication.adapter.FavoriteTasksArrayAdapter;
+import com.example.vanahel.tasksmanagerapplication.adapter.TasksArrayAdapter;
 import com.example.vanahel.tasksmanagerapplication.dao.TaskDAO;
 import com.example.vanahel.tasksmanagerapplication.loader.FavoriteAsyncTaskLoader;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
@@ -17,10 +17,10 @@ public class FavoriteAsyncTasksLoaderCallbacks implements LoaderManager.LoaderCa
 
     private Context context;
     private TaskDAO taskDAO;
-    private FavoriteTasksArrayAdapter favoriteTasksArrayAdapter;
+    private TasksArrayAdapter favoriteTasksArrayAdapter;
 
     public FavoriteAsyncTasksLoaderCallbacks (Context context, TaskDAO taskDAO,
-                                              FavoriteTasksArrayAdapter favoriteTasksArrayAdapter){
+                                              TasksArrayAdapter favoriteTasksArrayAdapter){
         this.context = context;
         this.taskDAO = taskDAO;
         this.favoriteTasksArrayAdapter = favoriteTasksArrayAdapter;
@@ -33,11 +33,11 @@ public class FavoriteAsyncTasksLoaderCallbacks implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<List<Task>> loader, List<Task> task) {
-        favoriteTasksArrayAdapter.setFavoriteTask(task);
+                favoriteTasksArrayAdapter.setTask(task);
     }
 
     @Override
     public void onLoaderReset(Loader<List<Task>> loader) {
-        favoriteTasksArrayAdapter.setFavoriteTask(new ArrayList<Task>());
+        favoriteTasksArrayAdapter.setTask(new ArrayList<Task>());
     }
 }

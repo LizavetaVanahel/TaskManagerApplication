@@ -12,19 +12,20 @@ import com.example.vanahel.tasksmanagerapplication.dao.MemoryDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.SharedPreferencesDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.TaskDAO;
 
-public class SettingsPreferenceChangeListener implements Preference.OnPreferenceChangeListener  {
+
+public class TaskSettingsChangeListener implements Preference.OnPreferenceChangeListener {
 
     private Context context;
     private TaskDAO taskDAO;
 
-    public SettingsPreferenceChangeListener (Context context, TaskDAO taskDAO){
+    public TaskSettingsChangeListener (Context context, TaskDAO taskDAO){
         this.context = context;
         this.taskDAO = taskDAO;
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object o) {
-        switch(preference.getKey()) {
+        switch (o.toString()) {
             case SettingsConstants.SHARED_PREFERENCES:
                 taskDAO = new SharedPreferencesDAO(context);
                 DAOManager.getInstance().setTaskDAO(taskDAO);
@@ -45,9 +46,10 @@ public class SettingsPreferenceChangeListener implements Preference.OnPreference
                 taskDAO = new MemoryDAO();
                 DAOManager.getInstance().setTaskDAO(taskDAO);
                 break;
-            default:
-                break;
+
         }
         return true;
+
     }
+
 }

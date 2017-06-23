@@ -19,18 +19,19 @@ public class InternalStorageDAO implements TaskDAO {
 
     private Context context;
     private final static String INTERNAL_TASK_FILE_NAME = "Task";
+    private final static String COMMA = ",";
 
     public InternalStorageDAO(Context context){
         this.context = context;
     }
 
     @Override
-    public void save(String title, String description, Boolean isFavorite) {
+    public void save(Task task) {
         try {
             File file = new File(context.getFilesDir(), INTERNAL_TASK_FILE_NAME);
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-            int favorite = isFavorite ? 1 : 0;
-            String taskCSVStr = title + "," + description + "," + favorite;
+            String taskCSVStr = task.getTitle() + COMMA + task.getDescription()
+                    + COMMA + task.getFavoriteAsInt() + COMMA + task.getId();
             writer.write(taskCSVStr);
             writer.newLine();
             writer.close();
@@ -68,8 +69,8 @@ public class InternalStorageDAO implements TaskDAO {
     }
 
     private Task buildTaskFromStr(String taskCSV) {
-        String[] taskProps = taskCSV.split(",");
-        return new Task(taskProps[0], taskProps[1], taskProps[2].equals("1"));
+        String[] taskProps = taskCSV.split(COMMA);
+        return new Task(taskProps[0], taskProps[1], taskProps[2].equals("1"), taskProps[3]);
     }
 
     @Override
@@ -80,8 +81,8 @@ public class InternalStorageDAO implements TaskDAO {
 
         try {
             File taskFile = new File(context.getFilesDir(), INTERNAL_TASK_FILE_NAME);
-            FileInputStream fIn = new FileInputStream(taskFile);
-            myReader = new BufferedReader(new InputStreamReader(fIn));
+            FileInputStream fileInputStream = new FileInputStream(taskFile);
+            myReader = new BufferedReader(new InputStreamReader(fileInputStream));
             while ((dataRow = myReader.readLine()) != null) {
                 if (dataRow.contains("1")) {
                     taskList.add(buildTaskFromStr(dataRow));
@@ -106,13 +107,12 @@ public class InternalStorageDAO implements TaskDAO {
         File taskFile = new File(context.getFilesDir(), INTERNAL_TASK_FILE_NAME);
         FileInputStream fIn = new FileInputStream(taskFile);
         BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
-
         String line;
         String input = "";
-        String taskCSVStr = task.getTitle() + "," + task.getDescription() + "," + (task.getFavoriteAsInt());
 
         while ((line = myReader.readLine()) != null) {
-            if (line.trim().equals(taskCSVStr)) {
+            String[] taskString = line.split(COMMA);
+            if (taskString[3].equals(task.getId())){
                 System.out.println("Line deleted.");
             } else {
                 input += line + System.lineSeparator();
@@ -131,8 +131,10 @@ public class InternalStorageDAO implements TaskDAO {
         BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
         String line;
         String input = "";
-        String oldTaskString = oldTask.getTitle() + "," + oldTask.getDescription() + "," + (oldTask.getFavoriteAsInt());
-        String newTaskString = newTask.getTitle() + "," + newTask.getDescription() + "," + (newTask.getFavoriteAsInt());
+        String oldTaskString = oldTask.getTitle() + COMMA + oldTask.getDescription()
+                + COMMA + oldTask.getFavoriteAsInt() + COMMA + oldTask.getId();
+        String newTaskString = newTask.getTitle() + COMMA + newTask.getDescription()
+                + COMMA + newTask.getFavoriteAsInt() + COMMA + newTask.getId();
 
         while ((line = myReader.readLine()) != null)
             input += line + System.lineSeparator();

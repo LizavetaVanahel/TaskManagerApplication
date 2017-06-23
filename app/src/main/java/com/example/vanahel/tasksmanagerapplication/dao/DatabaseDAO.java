@@ -24,28 +24,27 @@ public class DatabaseDAO implements TaskDAO {
 
     private static final String DB_CREATE =
             "CREATE TABLE " + DB_TABLE + "(" +
-                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_ID + " STRING PRIMARY KEY, " +
                     COLUMN_TITLE + " TEXT, " +
                     COLUMN_DESCRIPTION + " TEXT, " +
                     COLUMN_IS_FAVORITE +  " INTEGER);";
 
-    private Context mCtx;
+    private Context context;
+    private DBHelper dbHelper;
+    private SQLiteDatabase database;
 
-    private DBHelper mDBHelper;
-    private SQLiteDatabase mDB;
-
-    public DatabaseDAO(Context ctx) {
-        mCtx = ctx;
+    public DatabaseDAO(Context context) {
+        this.context = context;
         open();
     }
 
     private void open() {
-        this.mDBHelper = new DBHelper(mCtx, DB_NAME, null, DB_VERSION);
-        this.mDB = mDBHelper.getWritableDatabase();
+        this.dbHelper = new DBHelper(context, DB_NAME, null, DB_VERSION);
+        this.database = dbHelper.getWritableDatabase();
     }
 
     public void close() {
-        if (mDBHelper!=null) mDBHelper.close();
+        if (dbHelper !=null) dbHelper.close();
     }
 
     public void updateTask (Task newTask, Task oldTask){
@@ -53,33 +52,35 @@ public class DatabaseDAO implements TaskDAO {
         cv.put(COLUMN_TITLE, newTask.getTitle());
         cv.put(COLUMN_DESCRIPTION, newTask.getDescription());
         cv.put(COLUMN_IS_FAVORITE, newTask.getFavoriteAsInt());
+        cv.put(COLUMN_ID, newTask.getId());
 
-        int affectedRows = mDB.update(DB_TABLE, cv, COLUMN_TITLE + "=? AND " +
-                COLUMN_DESCRIPTION + "=?",
-                new String[] {oldTask.getTitle(), oldTask.getDescription()});
+        int affectedRows = database.update(DB_TABLE, cv, COLUMN_ID + "=?", new String[] {oldTask.getId()});
         System.out.print("SQL update method. Rows affected: " + affectedRows);
     }
 
-    public void save(String title, String description, Boolean isFavorite) {
+    public void save(Task task) {
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_TITLE, title);
-        cv.put(COLUMN_DESCRIPTION, description);
-        cv.put(COLUMN_IS_FAVORITE, isFavorite? 1 : 0 );
-        mDB.insert(DB_TABLE, null, cv);
+        cv.put(COLUMN_TITLE, task.getTitle());
+        cv.put(COLUMN_DESCRIPTION, task.getDescription());
+        cv.put(COLUMN_IS_FAVORITE, task.getFavoriteAsInt());
+        cv.put(COLUMN_ID, task.getId());
+        database.insert(DB_TABLE, null, cv);
     }
 
     public List<Task> getFavoriteTasks () {
-        try (Cursor cursor = mDB.rawQuery("SELECT * FROM " + DB_TABLE + " WHERE " +
+        try (Cursor cursor = database.rawQuery("SELECT * FROM " + DB_TABLE + " WHERE " +
                         COLUMN_IS_FAVORITE + "=?", new String[]{"true"})){
             List tasks = new LinkedList();
             while (cursor.moveToNext()) {
                 int Title_index = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_TITLE);
                 int Description_index = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_DESCRIPTION);
                 int IsFavorite_index = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_IS_FAVORITE);
+                int idIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_ID);
                 String title = cursor.getString(Title_index);
                 String description = cursor.getString(Description_index);
                 boolean isFavorite = cursor.getInt(IsFavorite_index) == 1;
-                tasks.add(new Task(title, description, isFavorite));
+                String id = cursor.getString(idIndex);
+                tasks.add(new Task(title, description, isFavorite, id));
             }
             return tasks;
         }
@@ -87,24 +88,25 @@ public class DatabaseDAO implements TaskDAO {
 
     @Override
     public List<Task> getTasks() {
-        try (Cursor cursor = mDB.query(DB_TABLE, null, null, null, null, null, null)) {
+        try (Cursor cursor = database.query(DB_TABLE, null, null, null, null, null, null)) {
             List tasks = new LinkedList();
             while (cursor.moveToNext()) {
-                int Title_index = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_TITLE);
-                int Description_index = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_DESCRIPTION);
-                int IsFavorite_index = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_IS_FAVORITE);
-                String title = cursor.getString(Title_index);
-                String description = cursor.getString(Description_index);
-                boolean isFavorite = cursor.getInt(IsFavorite_index) == 1;
-                tasks.add(new Task(title, description, isFavorite));
+                int titleIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_TITLE);
+                int descriptionIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_DESCRIPTION);
+                int isFavoriteIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_IS_FAVORITE);
+                int idIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_ID);
+                String title = cursor.getString(titleIndex);
+                String description = cursor.getString(descriptionIndex);
+                boolean isFavorite = cursor.getInt(isFavoriteIndex) == 1;
+                String id = cursor.getString(idIndex);
+                tasks.add(new Task(title, description, isFavorite, id));
             }
             return tasks;
         }
     }
 
     public void delete(Task task) {
-        mDB.delete(DB_TABLE, COLUMN_TITLE + "=? AND " +
-        COLUMN_DESCRIPTION + "=?", new String[]{task.getTitle(),task.getDescription()});
+        database.delete(DB_TABLE, COLUMN_ID + "=?", new String[] {task.getId()});
     }
 
     private class DBHelper extends SQLiteOpenHelper {

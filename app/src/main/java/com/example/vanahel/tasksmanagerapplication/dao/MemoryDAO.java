@@ -12,8 +12,8 @@ public class MemoryDAO  implements TaskDAO {
     private List<Task> tasksList = new ArrayList<>();
 
     @Override
-    public void save(String title, String description, Boolean isFavorite) {
-        tasksList.add(new Task (title, description, isFavorite));
+    public void save(Task task) {
+        tasksList.add(new Task (task.getTitle(), task.getDescription(), task.getFavorite(), task.getId()));
     }
 
     @Override
@@ -24,9 +24,9 @@ public class MemoryDAO  implements TaskDAO {
     @Override
     public List<Task> getFavoriteTasks() {
         List <Task> favoriteTasksList = new ArrayList<>();
-        for ( Task currentTask :tasksList ) {
-            if (currentTask.getFavorite()){
-                favoriteTasksList.add(currentTask);
+        for ( Task currentTask : tasksList ) {
+            if ( currentTask.getFavorite() ){
+                favoriteTasksList.add( currentTask );
             }
         }
         return favoriteTasksList;
@@ -36,7 +36,7 @@ public class MemoryDAO  implements TaskDAO {
     public void delete(Task task) throws IOException {
         for (Iterator<Task> iterator = tasksList.iterator(); iterator.hasNext(); ) {
             Task currentTask = iterator.next();
-            if (currentTask.equals(task)) {
+            if (currentTask.getId().equals(task.getId())) {
                 iterator.remove();
             }
         }
@@ -46,7 +46,7 @@ public class MemoryDAO  implements TaskDAO {
     public void updateTask(Task newTask, Task oldTask) throws IOException {
         for (Iterator<Task> iterator = tasksList.iterator(); iterator.hasNext(); ) {
             Task currentTask = iterator.next();
-            if (currentTask.equals(oldTask)) {
+            if (currentTask.getId().equals(oldTask.getId())) {
                 iterator.remove();
                 tasksList.add(newTask);
             }

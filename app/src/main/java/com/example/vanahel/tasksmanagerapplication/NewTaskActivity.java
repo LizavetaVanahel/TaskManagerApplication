@@ -13,11 +13,13 @@ import com.example.vanahel.tasksmanagerapplication.dao.DAOManager;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class NewTaskActivity extends ActionBarActivity {
 
     private Task task;
     private Boolean savedIsFavorite;
+    private String savedId;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -33,11 +35,12 @@ public class NewTaskActivity extends ActionBarActivity {
             String savedTitle = task.getTitle();
             String savedDescription = task.getDescription();
             savedIsFavorite = task.getFavorite();
+            savedId = task.getId();
             title.setText(savedTitle);
             title.setSelection(title.getText().length());
             description.setText(savedDescription);
             description.setSelection(description.getText().length());
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("The fields are empty");
         }
 
@@ -50,24 +53,24 @@ public class NewTaskActivity extends ActionBarActivity {
                 if (getIntent().hasExtra(ExtrasConstants.TASK_EXTRAS)) {
                     try {
                         DAOManager.getInstance().getTaskDAO().updateTask
-                                (new Task(enteredTitle, enteredDescription, savedIsFavorite), task);
+                                (new Task(enteredTitle, enteredDescription, savedIsFavorite, savedId), task);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     startActivity(intent);
-                   } else{
-                    if (getIntent().getStringExtra(ExtrasConstants.TAB_EXTRAS).equals(TabConstants.ALL_TAB)){
-                        DAOManager.getInstance().getTaskDAO().save(enteredTitle, enteredDescription, false);
+                } else {
+                    if (getIntent().getStringExtra(ExtrasConstants.TAB_EXTRAS).equals(TabConstants.ALL_TAB)) {
+                        DAOManager.getInstance().getTaskDAO().save(new Task(enteredTitle,
+                                enteredDescription, false, UUID.randomUUID().toString()));
                     } else if (getIntent().getStringExtra(ExtrasConstants.TAB_EXTRAS).equals
                             (TabConstants.FAVORITE_TAB)) {
                         DAOManager.getInstance().getTaskDAO().save
-                                (enteredTitle, enteredDescription, true);
+                                (new Task(enteredTitle, enteredDescription, true, UUID.randomUUID().toString()));
                     }
                     startActivity(intent);
-                   }
+                }
             }
         });
-
     }
 }
 

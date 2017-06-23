@@ -8,6 +8,7 @@ public class Task implements Parcelable {
     private String title;
     private String description;
     private Boolean isFavorite;
+    private String id;
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
 
         public Task createFromParcel(Parcel in) {
@@ -19,16 +20,19 @@ public class Task implements Parcelable {
         }
     };
 
-    public Task (String title, String description, boolean isFavorite){
+
+    public Task (String title, String description, boolean isFavorite, String id){
         this.title = title;
         this.description = description;
         this.isFavorite = isFavorite;
+        this.id = id;
     }
 
     private Task (Parcel in){
         title = in.readString();
         description = in.readString();
         isFavorite = Boolean.parseBoolean(in.readString());
+        id = in.readString();
     }
 
     public String getTitle() {
@@ -59,6 +63,14 @@ public class Task implements Parcelable {
         isFavorite = favorite;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -69,29 +81,36 @@ public class Task implements Parcelable {
         parcel.writeString(title);
         parcel.writeString(description);
         parcel.writeString(isFavorite.toString());
+        parcel.writeString(id);
     }
 
     public String toString() {
-        return title + "," + description + "," + (isFavorite ? 1:0)  + System.lineSeparator();
+        return title + "," + description + "," + (isFavorite ? 1:0) + "," + id + System.lineSeparator();
     }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Task task = (Task) o;
+
         if (title != null ? !title.equals(task.title) : task.title != null) return false;
         if (description != null ? !description.equals(task.description) : task.description != null)
             return false;
-        return isFavorite != null ? isFavorite.equals(task.isFavorite) : task.isFavorite == null;
+        if (isFavorite != null ? !isFavorite.equals(task.isFavorite) : task.isFavorite != null)
+            return false;
+        return id != null ? id.equals(task.id) : task.id == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = title != null ? title.hashCode() : 0;
-        result = 31 * result + (isFavorite != null ? isFavorite.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (isFavorite != null ? isFavorite.hashCode() : 0);
+        result = 31 * result + (id != null ? id.hashCode() : 0);
         return result;
     }
 }

@@ -51,9 +51,9 @@ public class ListItemMenuListener implements View.OnClickListener  {
                         Intent deleteIntent = new Intent(context, MainActivity.class);
                         context.startActivity(deleteIntent);
                         break;
-                    case R.id.addToFavorite:
+                    case R.id.add_to_favorite:
                         Intent updateIntent = new Intent(context, MainActivity.class);
-                        Task favoriteTask = new Task (task.getTitle(), task.getDescription(), true);
+                        Task favoriteTask = new Task (task.getTitle(), task.getDescription(), true, task.getId());
                         try {
                             DAOManager.getInstance().getTaskDAO().updateTask(favoriteTask, task);
                         } catch (IOException e) {
@@ -63,7 +63,7 @@ public class ListItemMenuListener implements View.OnClickListener  {
                         break;
                     case R.id.delete_from_favorite:
                         Intent deleteFromFavoriteIntent = new Intent(context, MainActivity.class);
-                        Task simpleTask = new Task (task.getTitle(), task.getDescription(), false);
+                        Task simpleTask = new Task (task.getTitle(), task.getDescription(), false, task.getId());
                         try {
                             DAOManager.getInstance().getTaskDAO().updateTask(simpleTask, task);
                         } catch (IOException e) {

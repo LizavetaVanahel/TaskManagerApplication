@@ -1,31 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="From:"
-        android:gravity="center_vertical">
-        <CheckBoxPreference
-            android:title="Memory"
-            android:key="memory"
-            android:persistent="true" />
-        <CheckBoxPreference
-            android:key="sharedpref"
-            android:gravity="center_vertical"
-            android:title="Shared Preferences"
-            android:persistent="true" />
-        <CheckBoxPreference
-            android:title="Database"
-            android:key="database"
-            android:gravity="center_vertical"
-            android:persistent="true" />
-        <CheckBoxPreference
-            android:title="External Storage"
-            android:key="externalstorage"
-            android:gravity="center_vertical"
-            android:persistent="true" />
-        <CheckBoxPreference
-            android:key="internalstorage"
-            android:title="Internal Storage"
-            android:gravity="center_vertical"
-            android:persistent="true" />
+        android:title="From">
+        <ListPreference
+            android:title="STORAGE"
+            android:key="listPref"
+            android:entries="@array/listArray"
+            android:entryValues="@array/taskStorageData" />
     </PreferenceCategory>
 </PreferenceScreen>

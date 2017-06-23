@@ -8,30 +8,36 @@
 
     <TextView
         android:id="@+id/title_item"
-        android:layout_width="500dp"
-        android:layout_height="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:paddingEnd="@dimen/menu_button_size"
+        android:paddingRight="@dimen/menu_button_size"/>
 
     <TextView
         android:id="@+id/description_item"
-        android:layout_width="500dp"
-        android:layout_height="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/title_item"
-        android:layout_alignStart="@+id/title_item" />
+        android:layout_alignStart="@+id/title_item"
+        android:paddingEnd="@dimen/menu_button_size"
+        android:paddingRight="@dimen/menu_button_size"/>
 
     <TextView
-        android:id="@+id/favorute_item"
-        android:layout_width="500dp"
-        android:layout_height="60dp"
+        android:id="@+id/favorite_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/description_item"
         android:layout_alignStart="@+id/description_item" />
 
     <Button
         android:id="@+id/list_item_menu_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/menu_button_size"
+        android:layout_height="@dimen/menu_button_size"
         android:layout_alignEnd="@id/title_item"
-        android:text="@string/menu_button"/>
+        android:layout_alignRight="@id/title_item"
+        android:text="@string/menu_button"
+        />
 
 </RelativeLayout>
