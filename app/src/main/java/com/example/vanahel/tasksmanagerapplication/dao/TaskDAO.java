@@ -15,6 +15,6 @@ public interface TaskDAO {
 
      void delete (Task task) throws IOException;
 
-     void updateTask (Task newTask,Task oldTask) throws IOException;
+     void updateTask ( Task newTask,Task oldTask ) throws IOException;
 
 }

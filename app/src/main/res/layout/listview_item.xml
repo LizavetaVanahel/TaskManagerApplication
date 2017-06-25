@@ -11,7 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:textColor="@color/title_text_black"
+        android:textSize="@dimen/title_text_size"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:paddingEnd="@dimen/menu_button_size"
         android:paddingRight="@dimen/menu_button_size"/>
 
@@ -21,6 +24,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/title_item"
         android:layout_alignStart="@+id/title_item"
+        android:textStyle="italic"
+        android:textColor="@color/description_text_grey"
+        android:textSize="@dimen/description_text_size"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:paddingEnd="@dimen/menu_button_size"
         android:paddingRight="@dimen/menu_button_size"/>
 

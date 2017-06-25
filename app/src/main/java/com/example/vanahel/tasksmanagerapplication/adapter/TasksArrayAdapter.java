@@ -34,12 +34,10 @@ public class TasksArrayAdapter extends BaseAdapter {
         final Task task = (Task)getItem(position);
         final TextView title = (TextView) convertView.findViewById(R.id.title_item);
         final TextView description = (TextView) convertView.findViewById(R.id.description_item);
-        final TextView favorite = (TextView) convertView.findViewById(R.id.favorite_item);
         final Button menuButton = (Button) convertView.findViewById(R.id.list_item_menu_button);
 
         title.setText(task.getTitle());
         description.setText(task.getDescription());
-        favorite.setText(task.getFavorite().toString());
 
         ListItemMenuListener listItemMenuListener = new ListItemMenuListener(context, task);
         menuButton.setOnClickListener(listItemMenuListener);

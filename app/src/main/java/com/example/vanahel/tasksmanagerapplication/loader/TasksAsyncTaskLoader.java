@@ -6,7 +6,6 @@ import android.content.Context;
 import com.example.vanahel.tasksmanagerapplication.dao.TaskDAO;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TasksAsyncTaskLoader extends AsyncTaskLoader< List<Task> > {
@@ -20,9 +19,6 @@ public class TasksAsyncTaskLoader extends AsyncTaskLoader< List<Task> > {
 
     @Override
     public List<Task> loadInBackground() {
-        List<Task> list;
-        list = new ArrayList<>();
-                    list.addAll(taskDAO.getTasks());
-        return list;
+        return taskDAO.getTasks();
     }
 }

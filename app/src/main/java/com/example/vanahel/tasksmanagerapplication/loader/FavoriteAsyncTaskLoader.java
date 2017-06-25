@@ -6,7 +6,6 @@ import android.content.Context;
 import com.example.vanahel.tasksmanagerapplication.dao.TaskDAO;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteAsyncTaskLoader extends AsyncTaskLoader< List<Task> > {
@@ -20,17 +19,6 @@ public class FavoriteAsyncTaskLoader extends AsyncTaskLoader< List<Task> > {
 
     @Override
     public List<Task> loadInBackground() {
-        List<Task> favoriteTasksList;
-        favoriteTasksList = new ArrayList<>();
-        List<Task> allTasksList;
-        allTasksList = new ArrayList<>();
-        allTasksList.addAll(taskDAO.getTasks());
-
-        for ( Task currentTask : allTasksList ) {
-            if (currentTask.getFavorite()) {
-                favoriteTasksList.add(currentTask);
-            }
-        }
-        return favoriteTasksList;
+        return taskDAO.getFavoriteTasks();
     }
 }

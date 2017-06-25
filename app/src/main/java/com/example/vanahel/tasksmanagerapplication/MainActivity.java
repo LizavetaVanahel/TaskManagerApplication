@@ -33,7 +33,6 @@ public class MainActivity extends TabActivity
     private ListView tasksList;
     private ListView favoriteTasksList;
 
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +45,6 @@ public class MainActivity extends TabActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
-
         TabHost tabHost = getTabHost();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -55,7 +53,8 @@ public class MainActivity extends TabActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         this.setNewTab(this, tabHost, TabConstants.ALL_TAB, R.string.textTabTitle1, android.R.drawable.star_on, R.id.tab1);
-        this.setNewTab(this, tabHost, TabConstants.FAVORITE_TAB, R.string.textTabTitle2, android.R.drawable.star_on, R.id.tab2);
+        this.setNewTab(this, tabHost, TabConstants.FAVORITE_TAB, R.string.textTabTitle2,
+                android.R.drawable.star_on, R.id.tab2);
 
         NewTaskButtonListener newTaskButtonListener =
                 new NewTaskButtonListener(this, tabHost);
@@ -77,9 +76,9 @@ public class MainActivity extends TabActivity
 
         AsyncTaskLoaderCallbacks asyncTaskLoaderCallbacks =
                 new AsyncTaskLoaderCallbacks(this, taskDAO, allTasksArrayAdapter);
-        FavoriteAsyncTasksLoaderCallbacks favoriteAsyncTasksLoaderCallbacks =
-                new FavoriteAsyncTasksLoaderCallbacks(MainActivity.this, taskDAO,
-                        favoriteTasksArrayAdapter);
+        FavoriteAsyncTasksLoaderCallbacks favoriteAsyncTasksLoaderCallbacks
+                = new FavoriteAsyncTasksLoaderCallbacks(MainActivity.this, taskDAO,
+                favoriteTasksArrayAdapter);
 
         getLoaderManager().restartLoader(ALL_TASKS_LOADER_ID, null,
                 asyncTaskLoaderCallbacks).forceLoad();
@@ -88,6 +87,7 @@ public class MainActivity extends TabActivity
 
         tasksList.setAdapter(allTasksArrayAdapter);
         favoriteTasksList.setAdapter(favoriteTasksArrayAdapter);
+
     }
 
     private void setNewTab(Context context, TabHost tabHost, String tag, int title, int icon, int contentID ){

@@ -25,33 +25,33 @@ public class SharedPreferencesDAO implements TaskDAO {
     public void save(Task task) {
 
         SharedPreferences sharedPreferences =
-                context.getSharedPreferences(SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE);
+                context.getSharedPreferences( SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE );
         SharedPreferences.Editor edit = sharedPreferences.edit();
-        String tasksString = sharedPreferences.getString(SHARED_PREFERENCES_VARIABLE, "");
+        String tasksString = sharedPreferences.getString( SHARED_PREFERENCES_VARIABLE, "" );
         Integer favorite = task.getFavoriteAsInt();
         String tasksCSV = task.getTitle() + COMMA + task.getDescription() + COMMA + favorite
                 + COMMA + task.getId() + System.lineSeparator();
         String result = tasksString + tasksCSV;
 
-        edit.putString(SHARED_PREFERENCES_VARIABLE, result).apply();
+        edit.putString( SHARED_PREFERENCES_VARIABLE, result ).apply();
     }
 
     @Override
     public List<Task> getTasks() {
         SharedPreferences sharedPreferences =
-                context.getSharedPreferences(SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE);
-        String tasksString = sharedPreferences.getString(SHARED_PREFERENCES_VARIABLE, "");
+                context.getSharedPreferences( SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE );
+        String tasksString = sharedPreferences.getString( SHARED_PREFERENCES_VARIABLE, "" );
         List<Task> tasksList = new LinkedList<>();
         try {
-            String[] tasksArr = tasksString.split(System.lineSeparator());
-            ArrayList<String> arrayToList = new ArrayList<>(Arrays.asList(tasksArr));
+            String[] tasksArr = tasksString.split( System.lineSeparator() );
+            ArrayList<String> arrayToList = new ArrayList<>( Arrays.asList(tasksArr) );
 
-            for (String taskStr : arrayToList) {
+            for ( String taskStr : arrayToList ) {
                 String[] taskValues = taskStr.split(COMMA);
-                if(taskValues.length == 0) {
+                if ( taskValues.length == 0 ) {
                     continue;
                 }
-                tasksList.add(new Task(taskValues[0], taskValues[1], taskValues[2].equals("1"),taskValues[3]));
+                tasksList.add( new Task( taskValues[0], taskValues[1], taskValues[2].equals("1"),taskValues[3]) );
             }
         }catch (Exception e){
             System.out.println("Shared preferences is empty");
@@ -62,21 +62,21 @@ public class SharedPreferencesDAO implements TaskDAO {
     @Override
     public List<Task> getFavoriteTasks() {
         SharedPreferences sharedPreferences =
-                context.getSharedPreferences(SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE);
-        String tasksString = sharedPreferences.getString(SHARED_PREFERENCES_VARIABLE, "");
+                context.getSharedPreferences( SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE );
+        String tasksString = sharedPreferences.getString( SHARED_PREFERENCES_VARIABLE, "" );
         List<Task> favoriteTasksList = new LinkedList<>();
         try {
-            String[] tasksArr = tasksString.split(System.lineSeparator());
-            ArrayList<String> arrayToList = new ArrayList<>(Arrays.asList(tasksArr));
+            String[] tasksArr = tasksString.split( System.lineSeparator() );
+            ArrayList<String> arrayToList = new ArrayList<>( Arrays.asList(tasksArr) );
 
-            for (String taskStr : arrayToList) {
+            for ( String taskStr : arrayToList ) {
                 String[] taskValues = taskStr.split(COMMA);
-                if (taskValues.length == 0) {
+                if ( taskValues.length == 0 ) {
                     continue;
                 }
-                if (taskValues[2].equals("1")) {
-                    favoriteTasksList.add(new Task(taskValues[0], taskValues[1],
-                            taskValues[2].equals("1"),taskValues[3]));
+                if ( taskValues[2].equals("1") ) {
+                    favoriteTasksList.add( new Task( taskValues[0], taskValues[1],
+                            taskValues[2].equals("1"),taskValues[3]) );
                 }
             }
         }catch (Exception e){
@@ -89,15 +89,15 @@ public class SharedPreferencesDAO implements TaskDAO {
     @Override
     public void delete(Task task) {
         SharedPreferences sharedPreferences =
-                context.getSharedPreferences(SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE);
-        String tasksString = sharedPreferences.getString(SHARED_PREFERENCES_VARIABLE, "");
+                context.getSharedPreferences( SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE );
+        String tasksString = sharedPreferences.getString( SHARED_PREFERENCES_VARIABLE, "" );
         SharedPreferences.Editor edit = sharedPreferences.edit();
         String newCreatedStr = "";
-        String[] tasksArr = tasksString.split(System.lineSeparator());
+        String[] tasksArr = tasksString.split( System.lineSeparator() );
 
-        for (String taskStr : tasksArr) {
+        for ( String taskStr : tasksArr ) {
             String[] values = taskStr.split(COMMA);
-            if (values.length < 3){
+            if ( values.length < 3 ){
                 continue;
             }
             String title = values[0];
@@ -105,26 +105,26 @@ public class SharedPreferencesDAO implements TaskDAO {
             Boolean isFavorite = values[2].equals("1");
             String id = values[3];
 
-            Task currentTask =  new Task (title, description, isFavorite, id);
+            Task currentTask =  new Task ( title, description, isFavorite, id );
 
             if ( !currentTask.equals(task) ) {
                 newCreatedStr += currentTask;
             }
         }
-        edit.putString(SHARED_PREFERENCES_VARIABLE, newCreatedStr).apply();
+        edit.putString( SHARED_PREFERENCES_VARIABLE, newCreatedStr ).apply();
     }
 
     @Override
     public void updateTask(Task newTask, Task oldTask) {
         SharedPreferences sharedPreferences =
-                context.getSharedPreferences(SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE);
-        String tasksString = sharedPreferences.getString(SHARED_PREFERENCES_VARIABLE, "");
+                context.getSharedPreferences( SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE );
+        String tasksString = sharedPreferences.getString( SHARED_PREFERENCES_VARIABLE, "" );
         SharedPreferences.Editor edit = sharedPreferences.edit();
         String newCreatedStr = "";
-        String[] tasksArr = tasksString.split(System.lineSeparator());
-        for (String taskStr : tasksArr) {
+        String[] tasksArr = tasksString.split( System.lineSeparator() );
+        for ( String taskStr : tasksArr ) {
             String[] values = taskStr.split(COMMA);
-            if (values.length < 3){
+            if ( values.length < 3 ) {
                 continue;
             }
             String title = values[0];
@@ -132,13 +132,13 @@ public class SharedPreferencesDAO implements TaskDAO {
             Boolean isFavorite = values[2].equals("1");
             String id = values[3];
             Task currentTask =  new Task (title, description, isFavorite, id);
-            if (currentTask.getId().equals(oldTask.getId())){
+            if ( currentTask.getId().equals(oldTask.getId()) ) {
                 newCreatedStr += newTask;
             } else {
                 newCreatedStr += currentTask;
             }
         }
-        edit.putString(SHARED_PREFERENCES_VARIABLE, newCreatedStr).apply();
+        edit.putString( SHARED_PREFERENCES_VARIABLE, newCreatedStr ).apply();
     }
 
 

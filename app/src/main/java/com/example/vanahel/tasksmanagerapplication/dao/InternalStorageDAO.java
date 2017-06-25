@@ -28,8 +28,8 @@ public class InternalStorageDAO implements TaskDAO {
     @Override
     public void save(Task task) {
         try {
-            File file = new File(context.getFilesDir(), INTERNAL_TASK_FILE_NAME);
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+            File file = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
+            BufferedWriter writer = new BufferedWriter( new FileWriter(file, true) );
             String taskCSVStr = task.getTitle() + COMMA + task.getDescription()
                     + COMMA + task.getFavoriteAsInt() + COMMA + task.getId();
             writer.write(taskCSVStr);
@@ -46,10 +46,10 @@ public class InternalStorageDAO implements TaskDAO {
         String dataRow;
 
         try {
-            File taskFile = new File(context.getFilesDir(), INTERNAL_TASK_FILE_NAME);
+            File taskFile = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
             FileInputStream fIn = new FileInputStream(taskFile);
-            myReader = new BufferedReader(new InputStreamReader(fIn));
-            while ((dataRow = myReader.readLine()) != null) {
+            myReader = new BufferedReader( new InputStreamReader(fIn) );
+            while ( (dataRow = myReader.readLine()) != null ) {
                 taskList.add( buildTaskFromStr(dataRow) );
             }
 
@@ -57,7 +57,7 @@ public class InternalStorageDAO implements TaskDAO {
             System.out.println("File is not created");
         } finally {
             try {
-                if (myReader != null) {
+                if ( myReader != null ) {
                     myReader.close();
                 }
             } catch (IOException e) {
@@ -70,7 +70,7 @@ public class InternalStorageDAO implements TaskDAO {
 
     private Task buildTaskFromStr(String taskCSV) {
         String[] taskProps = taskCSV.split(COMMA);
-        return new Task(taskProps[0], taskProps[1], taskProps[2].equals("1"), taskProps[3]);
+        return new Task( taskProps[0], taskProps[1], taskProps[2].equals("1"), taskProps[3] );
     }
 
     @Override
@@ -80,11 +80,12 @@ public class InternalStorageDAO implements TaskDAO {
         String dataRow;
 
         try {
-            File taskFile = new File(context.getFilesDir(), INTERNAL_TASK_FILE_NAME);
+            File taskFile = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
             FileInputStream fileInputStream = new FileInputStream(taskFile);
-            myReader = new BufferedReader(new InputStreamReader(fileInputStream));
-            while ((dataRow = myReader.readLine()) != null) {
-                if (dataRow.contains("1")) {
+            myReader = new BufferedReader( new InputStreamReader(fileInputStream) );
+            while ( (dataRow = myReader.readLine()) != null ) {
+                String[] task = dataRow.split(COMMA);
+                if ( task[2].contains("1") ) {
                     taskList.add(buildTaskFromStr(dataRow));
                 }
             }
@@ -104,31 +105,31 @@ public class InternalStorageDAO implements TaskDAO {
 
     @Override
     public void delete(Task task) throws IOException {
-        File taskFile = new File(context.getFilesDir(), INTERNAL_TASK_FILE_NAME);
+        File taskFile = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
         FileInputStream fIn = new FileInputStream(taskFile);
-        BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+        BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn) );
         String line;
         String input = "";
 
-        while ((line = myReader.readLine()) != null) {
+        while ( (line = myReader.readLine()) != null ) {
             String[] taskString = line.split(COMMA);
-            if (taskString[3].equals(task.getId())){
+            if ( taskString[3].equals(task.getId()) ){
                 System.out.println("Line deleted.");
             } else {
                 input += line + System.lineSeparator();
             }
         }
-        BufferedWriter writer = new BufferedWriter(new FileWriter(taskFile, false));
+        BufferedWriter writer = new BufferedWriter( new FileWriter(taskFile, false) );
         writer.write(input);
         myReader.close();
         writer.close();
     }
 
     @Override
-    public void updateTask(Task newTask, Task oldTask) throws IOException {
-        File taskFile = new File(context.getFilesDir(), INTERNAL_TASK_FILE_NAME);
+    public void updateTask( Task newTask, Task oldTask ) throws IOException {
+        File taskFile = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
         FileInputStream fIn = new FileInputStream(taskFile);
-        BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+        BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn) );
         String line;
         String input = "";
         String oldTaskString = oldTask.getTitle() + COMMA + oldTask.getDescription()
@@ -136,11 +137,11 @@ public class InternalStorageDAO implements TaskDAO {
         String newTaskString = newTask.getTitle() + COMMA + newTask.getDescription()
                 + COMMA + newTask.getFavoriteAsInt() + COMMA + newTask.getId();
 
-        while ((line = myReader.readLine()) != null)
+        while ( (line = myReader.readLine()) != null )
             input += line + System.lineSeparator();
             input = input.replace(oldTaskString, newTaskString);
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter(taskFile, false));
+        BufferedWriter writer = new BufferedWriter( new FileWriter(taskFile, false) );
         writer.write(input);
         myReader.close();
         writer.close();

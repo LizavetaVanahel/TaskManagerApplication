@@ -22,7 +22,8 @@ public class NewTaskButtonListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(context, NewTaskActivity.class);
-        if (tabHost.getCurrentTabTag().equals(TabConstants.ALL_TAB)){
+
+        if(tabHost.getCurrentTabTag().equals(TabConstants.ALL_TAB)){
             intent.putExtra(ExtrasConstants.TAB_EXTRAS, TabConstants.ALL_TAB);
         } else if (tabHost.getCurrentTabTag().equals(TabConstants.FAVORITE_TAB)){
             intent.putExtra(ExtrasConstants.TAB_EXTRAS, TabConstants.FAVORITE_TAB);

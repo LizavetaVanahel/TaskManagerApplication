@@ -4,7 +4,6 @@ import com.example.vanahel.tasksmanagerapplication.task.Task;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class MemoryDAO  implements TaskDAO {
@@ -13,7 +12,7 @@ public class MemoryDAO  implements TaskDAO {
 
     @Override
     public void save(Task task) {
-        tasksList.add(new Task (task.getTitle(), task.getDescription(), task.getFavorite(), task.getId()));
+        tasksList.add( new Task (task.getTitle(), task.getDescription(), task.getFavorite(), task.getId()) );
     }
 
     @Override
@@ -25,7 +24,7 @@ public class MemoryDAO  implements TaskDAO {
     public List<Task> getFavoriteTasks() {
         List <Task> favoriteTasksList = new ArrayList<>();
         for ( Task currentTask : tasksList ) {
-            if ( currentTask.getFavorite() ){
+            if ( currentTask.getFavorite() ) {
                 favoriteTasksList.add( currentTask );
             }
         }
@@ -34,21 +33,19 @@ public class MemoryDAO  implements TaskDAO {
 
     @Override
     public void delete(Task task) throws IOException {
-        for (Iterator<Task> iterator = tasksList.iterator(); iterator.hasNext(); ) {
-            Task currentTask = iterator.next();
-            if (currentTask.getId().equals(task.getId())) {
-                iterator.remove();
+        for ( int i = 0; i < tasksList.size(); i++ ) {
+            if ( tasksList.get(i).getId().equals(task.getId()) ) {
+                tasksList.remove(i);
             }
         }
     }
 
     @Override
     public void updateTask(Task newTask, Task oldTask) throws IOException {
-        for (Iterator<Task> iterator = tasksList.iterator(); iterator.hasNext(); ) {
-            Task currentTask = iterator.next();
-            if (currentTask.getId().equals(oldTask.getId())) {
-                iterator.remove();
-                tasksList.add(newTask);
+        for ( int i = 0; i < tasksList.size(); i++ ) {
+            if ( tasksList.get(i).getId().equals(oldTask.getId()) ) {
+                tasksList.remove(i);
+                tasksList.add(i, newTask);
             }
         }
     }
