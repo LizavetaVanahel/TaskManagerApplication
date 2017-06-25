@@ -24,9 +24,9 @@ public class NewTaskButtonListener implements View.OnClickListener {
         Intent intent = new Intent(context, NewTaskActivity.class);
 
         if(tabHost.getCurrentTabTag().equals(TabConstants.ALL_TAB)){
-            intent.putExtra(ExtrasConstants.TAB_EXTRAS, TabConstants.ALL_TAB);
+            intent.putExtra(ExtrasConstants.TAB_EXTRAS, false);
         } else if (tabHost.getCurrentTabTag().equals(TabConstants.FAVORITE_TAB)){
-            intent.putExtra(ExtrasConstants.TAB_EXTRAS, TabConstants.FAVORITE_TAB);
+            intent.putExtra(ExtrasConstants.TAB_EXTRAS,true);
         }
         context.startActivity(intent);
     }

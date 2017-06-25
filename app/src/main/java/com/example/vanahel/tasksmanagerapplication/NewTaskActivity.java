@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.vanahel.tasksmanagerapplication.constants.ExtrasConstants;
-import com.example.vanahel.tasksmanagerapplication.constants.TabConstants;
 import com.example.vanahel.tasksmanagerapplication.dao.DAOManager;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
@@ -59,14 +58,9 @@ public class NewTaskActivity extends ActionBarActivity {
                     }
                     startActivity(intent);
                 } else {
-                    if (getIntent().getStringExtra(ExtrasConstants.TAB_EXTRAS).equals(TabConstants.ALL_TAB)) {
+                    boolean isTabFavorite = getIntent().getBooleanExtra(ExtrasConstants.TAB_EXTRAS, false);
                         DAOManager.getInstance().getTaskDAO().save(new Task(enteredTitle,
-                                enteredDescription, false, UUID.randomUUID().toString()));
-                    } else if (getIntent().getStringExtra(ExtrasConstants.TAB_EXTRAS).equals
-                            (TabConstants.FAVORITE_TAB)) {
-                        DAOManager.getInstance().getTaskDAO().save
-                                (new Task(enteredTitle, enteredDescription, true, UUID.randomUUID().toString()));
-                    }
+                                enteredDescription, isTabFavorite, UUID.randomUUID().toString()));
                     startActivity(intent);
                 }
             }

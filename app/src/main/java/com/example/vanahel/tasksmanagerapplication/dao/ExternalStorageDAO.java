@@ -81,7 +81,8 @@ public class ExternalStorageDAO implements TaskDAO {
             FileInputStream fileInputStream = new FileInputStream(taskFile);
             myReader = new BufferedReader(new InputStreamReader(fileInputStream));
             while ( (dataRow = myReader.readLine()) != null ) {
-                if ( dataRow.contains("1") ) {
+                String[] task = dataRow.split(COMMA);
+                if ( task[2].contains("1") ) {
                     taskList.add(buildTaskFromStr(dataRow));
                 }
             }
