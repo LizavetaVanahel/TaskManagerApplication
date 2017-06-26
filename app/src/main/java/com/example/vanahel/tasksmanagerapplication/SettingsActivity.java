@@ -51,10 +51,12 @@ public class SettingsActivity extends PreferenceActivity implements NavigationVi
         int id = item.getItemId();
         if (id == R.id.nav_task) {
             Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-            startActivity(intent);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, 0);
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(SettingsActivity.this, SettingsActivity.class);
-            startActivity(intent);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, 0);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

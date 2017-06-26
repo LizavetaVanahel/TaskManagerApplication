@@ -56,12 +56,14 @@ public class NewTaskActivity extends ActionBarActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    startActivity(intent);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(intent, 0);
                 } else {
                     boolean isTabFavorite = getIntent().getBooleanExtra(ExtrasConstants.TAB_EXTRAS, false);
                         DAOManager.getInstance().getTaskDAO().save(new Task(enteredTitle,
                                 enteredDescription, isTabFavorite, UUID.randomUUID().toString()));
-                    startActivity(intent);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(intent, 0);
                 }
             }
         });

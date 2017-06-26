@@ -32,6 +32,10 @@ public class MainActivity extends TabActivity
 
     private ListView tasksList;
     private ListView favoriteTasksList;
+    private TasksArrayAdapter allTasksArrayAdapter;
+    private TasksArrayAdapter favoriteTasksArrayAdapter;
+    private AsyncTaskLoaderCallbacks asyncTaskLoaderCallbacks;
+    private FavoriteAsyncTasksLoaderCallbacks favoriteAsyncTasksLoaderCallbacks;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -44,6 +48,14 @@ public class MainActivity extends TabActivity
         favoriteTasksList = (ListView) findViewById(R.id.favorite_task_list_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        TaskDAO taskDAO = DAOManager.getInstance().getTaskDAO();
+
+        allTasksArrayAdapter = new TasksArrayAdapter(this);
+        favoriteTasksArrayAdapter = new TasksArrayAdapter(this);
+
+        asyncTaskLoaderCallbacks = new AsyncTaskLoaderCallbacks(this, taskDAO, allTasksArrayAdapter);
+        favoriteAsyncTasksLoaderCallbacks = new FavoriteAsyncTasksLoaderCallbacks(MainActivity.this,
+                taskDAO, favoriteTasksArrayAdapter);
 
         TabHost tabHost = getTabHost();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -69,17 +81,6 @@ public class MainActivity extends TabActivity
     protected void onResume() {
         super.onResume();
 
-        TaskDAO taskDAO = DAOManager.getInstance().getTaskDAO();
-
-        TasksArrayAdapter allTasksArrayAdapter = new TasksArrayAdapter(this);
-        TasksArrayAdapter favoriteTasksArrayAdapter = new TasksArrayAdapter(this);
-
-        AsyncTaskLoaderCallbacks asyncTaskLoaderCallbacks =
-                new AsyncTaskLoaderCallbacks(this, taskDAO, allTasksArrayAdapter);
-        FavoriteAsyncTasksLoaderCallbacks favoriteAsyncTasksLoaderCallbacks
-                = new FavoriteAsyncTasksLoaderCallbacks(MainActivity.this, taskDAO,
-                favoriteTasksArrayAdapter);
-
         getLoaderManager().restartLoader(ALL_TASKS_LOADER_ID, null,
                 asyncTaskLoaderCallbacks).forceLoad();
         getLoaderManager().restartLoader(FAVORITE_TASKS_LOADER_ID, null,
@@ -103,11 +104,13 @@ public class MainActivity extends TabActivity
         public boolean onNavigationItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == R.id.nav_task) {
-                 Intent i = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(i);
+                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, 0);
             } else if (id == R.id.nav_settings) {
-                 Intent i = new Intent(MainActivity.this, SettingsActivity.class);
-                 startActivity(i);
+                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, 0);
          }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -1,6 +1,6 @@
 package com.example.vanahel.tasksmanagerapplication.event.listener;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.widget.TabHost;
@@ -11,23 +11,24 @@ import com.example.vanahel.tasksmanagerapplication.constants.TabConstants;
 
 public class NewTaskButtonListener implements View.OnClickListener {
 
-    private Context context;
+    private Activity activity;
     private TabHost tabHost;
 
-    public NewTaskButtonListener (Context context, TabHost tabHost) {
-        this.context = context;
+    public NewTaskButtonListener (Activity activity, TabHost tabHost) {
+        this.activity = activity;
         this.tabHost = tabHost;
     }
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(context, NewTaskActivity.class);
+        Intent intent = new Intent(activity, NewTaskActivity.class);
 
         if(tabHost.getCurrentTabTag().equals(TabConstants.ALL_TAB)){
             intent.putExtra(ExtrasConstants.TAB_EXTRAS, false);
         } else if (tabHost.getCurrentTabTag().equals(TabConstants.FAVORITE_TAB)){
             intent.putExtra(ExtrasConstants.TAB_EXTRAS,true);
         }
-        context.startActivity(intent);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivityForResult(intent, 0);
     }
 }

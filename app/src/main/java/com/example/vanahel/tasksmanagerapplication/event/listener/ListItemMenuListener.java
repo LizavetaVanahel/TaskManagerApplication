@@ -1,6 +1,6 @@
 package com.example.vanahel.tasksmanagerapplication.event.listener;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
@@ -18,17 +18,17 @@ import java.io.IOException;
 
 public class ListItemMenuListener implements View.OnClickListener  {
 
-    private Context context;
+    private Activity activity;
     private Task task;
 
-    public ListItemMenuListener (Context context, Task task){
-        this.context = context;
+    public ListItemMenuListener (Activity activity, Task task){
+        this.activity = activity;
         this.task = task;
     }
 
     public void onClick (View v){
         Button menuButton = (Button) v.findViewById(R.id.list_item_menu_button);
-        PopupMenu popup = new PopupMenu(context, menuButton);
+        PopupMenu popup = new PopupMenu(activity, menuButton);
         if (!task.getFavorite()) {
             popup.getMenuInflater().inflate(R.menu.popupmenu, popup.getMenu());
         } else {
@@ -38,9 +38,10 @@ public class ListItemMenuListener implements View.OnClickListener  {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.edit:
-                        Intent intent = new Intent(context, NewTaskActivity.class);
+                        Intent intent = new Intent(activity, NewTaskActivity.class);
                         intent.putExtra(ExtrasConstants.TASK_EXTRAS, task);
-                        context.startActivity(intent);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        activity.startActivityForResult(intent, 0);
                         break;
                     case R.id.delete:
                         try {
@@ -48,28 +49,31 @@ public class ListItemMenuListener implements View.OnClickListener  {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        Intent deleteIntent = new Intent(context, MainActivity.class);
-                        context.startActivity(deleteIntent);
+                        Intent deleteIntent = new Intent(activity, MainActivity.class);
+                        deleteIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        activity.startActivityForResult(deleteIntent, 0);
                         break;
                     case R.id.add_to_favorite:
-                        Intent updateIntent = new Intent(context, MainActivity.class);
+                        Intent updateIntent = new Intent(activity, MainActivity.class);
                         Task favoriteTask = new Task (task.getTitle(), task.getDescription(), true, task.getId());
                         try {
                             DAOManager.getInstance().getTaskDAO().updateTask(favoriteTask, task);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        context.startActivity(updateIntent);
+                        updateIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        activity.startActivityForResult(updateIntent, 0);
                         break;
                     case R.id.delete_from_favorite:
-                        Intent deleteFromFavoriteIntent = new Intent(context, MainActivity.class);
+                        Intent deleteFromFavoriteIntent = new Intent(activity, MainActivity.class);
                         Task simpleTask = new Task (task.getTitle(), task.getDescription(), false, task.getId());
                         try {
                             DAOManager.getInstance().getTaskDAO().updateTask(simpleTask, task);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        context.startActivity(deleteFromFavoriteIntent);
+                        deleteFromFavoriteIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        activity.startActivityForResult(deleteFromFavoriteIntent, 0);
                     default:
                         break;
                 }

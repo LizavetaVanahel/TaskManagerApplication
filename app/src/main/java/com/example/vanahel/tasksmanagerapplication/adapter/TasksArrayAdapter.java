@@ -1,6 +1,6 @@
 package com.example.vanahel.tasksmanagerapplication.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +19,11 @@ public class TasksArrayAdapter extends BaseAdapter {
 
     private LayoutInflater layoutInflater;
     private List<Task> tasks = new ArrayList<>();
-    private Context context;
+    private Activity activity;
 
-    public TasksArrayAdapter (Context context){
-        this.context = context;
-        layoutInflater = LayoutInflater.from(context);
+    public TasksArrayAdapter (Activity activity){
+        this.activity = activity;
+        layoutInflater = LayoutInflater.from(activity);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class TasksArrayAdapter extends BaseAdapter {
         title.setText(task.getTitle());
         description.setText(task.getDescription());
 
-        ListItemMenuListener listItemMenuListener = new ListItemMenuListener(context, task);
+        ListItemMenuListener listItemMenuListener = new ListItemMenuListener(activity, task);
         menuButton.setOnClickListener(listItemMenuListener);
         return convertView;
     }
@@ -61,6 +61,7 @@ public class TasksArrayAdapter extends BaseAdapter {
     }
 
     public void setTask (List<Task> data){
+        tasks.clear();
         tasks.addAll(data);
         notifyDataSetChanged();
     }

@@ -1,6 +1,6 @@
 package com.example.vanahel.tasksmanagerapplication.event.listener;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,10 +13,10 @@ import com.example.vanahel.tasksmanagerapplication.task.Task;
 
 public class TaskListItemClickListener implements AdapterView.OnItemClickListener {
 
-    private Context context;
+    private Activity activity;
 
-    public TaskListItemClickListener (Context context){
-        this.context = context;
+    public TaskListItemClickListener (Activity activity){
+        this.activity = activity;
     }
 
     @Override
@@ -26,8 +26,9 @@ public class TaskListItemClickListener implements AdapterView.OnItemClickListene
         TextView description = (TextView) adapterView.findViewById(R.id.description_item);
         title.setText(task.getTitle());
         description.setText(task.getDescription());
-        Intent intent = new Intent(context, NewTaskActivity.class);
+        Intent intent = new Intent(activity, NewTaskActivity.class);
         intent.putExtra(ExtrasConstants.TASK_EXTRAS, task);
-        context.startActivity(intent);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivityForResult(intent, 0);
     }
 }
