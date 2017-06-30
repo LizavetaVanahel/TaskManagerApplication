@@ -1,9 +1,9 @@
 package com.example.vanahel.tasksmanagerapplication.loader.callback;
 
-import android.app.LoaderManager;
-import android.content.Context;
-import android.content.Loader;
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 
 import com.example.vanahel.tasksmanagerapplication.adapter.TasksArrayAdapter;
 import com.example.vanahel.tasksmanagerapplication.dao.TaskDAO;
@@ -15,20 +15,20 @@ import java.util.List;
 
 public class FavoriteAsyncTasksLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<Task>> {
 
-    private Context context;
+    private Activity activity;
     private TaskDAO taskDAO;
     private TasksArrayAdapter favoriteTasksArrayAdapter;
 
-    public FavoriteAsyncTasksLoaderCallbacks (Context context, TaskDAO taskDAO,
+    public FavoriteAsyncTasksLoaderCallbacks (Activity activity, TaskDAO taskDAO,
                                               TasksArrayAdapter favoriteTasksArrayAdapter){
-        this.context = context;
+        this.activity = activity;
         this.taskDAO = taskDAO;
         this.favoriteTasksArrayAdapter = favoriteTasksArrayAdapter;
     }
 
     @Override
     public Loader<List<Task>> onCreateLoader(int i, Bundle bundle) {
-        return new FavoriteAsyncTaskLoader(context, taskDAO);
+        return new FavoriteAsyncTaskLoader(activity, taskDAO);
     }
 
     @Override

@@ -1,13 +1,13 @@
 package com.example.vanahel.tasksmanagerapplication.loader.callback;
 
-import android.app.LoaderManager;
-import android.content.Context;
-import android.content.Loader;
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 
 import com.example.vanahel.tasksmanagerapplication.adapter.TasksArrayAdapter;
-import com.example.vanahel.tasksmanagerapplication.loader.TasksAsyncTaskLoader;
 import com.example.vanahel.tasksmanagerapplication.dao.TaskDAO;
+import com.example.vanahel.tasksmanagerapplication.loader.TasksAsyncTaskLoader;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
 import java.util.ArrayList;
@@ -15,19 +15,19 @@ import java.util.List;
 
 public class AsyncTaskLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<Task>> {
 
-    private Context context;
+    private Activity activity;
     private TaskDAO taskDAO;
     private TasksArrayAdapter tasksArrayAdapter;
 
-    public AsyncTaskLoaderCallbacks (Context context, TaskDAO taskDAO, TasksArrayAdapter tasksArrayAdapter){
-        this.context = context;
+    public AsyncTaskLoaderCallbacks (Activity activity, TaskDAO taskDAO, TasksArrayAdapter tasksArrayAdapter){
+        this.activity = activity;
         this.taskDAO = taskDAO;
         this.tasksArrayAdapter = tasksArrayAdapter;
     }
 
     @Override
     public Loader<List<Task>> onCreateLoader(int i, Bundle bundle) {
-        return new TasksAsyncTaskLoader(context, taskDAO);
+        return new TasksAsyncTaskLoader(activity, taskDAO);
     }
 
     @Override

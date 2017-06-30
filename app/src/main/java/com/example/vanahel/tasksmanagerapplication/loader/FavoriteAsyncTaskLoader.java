@@ -1,7 +1,7 @@
 package com.example.vanahel.tasksmanagerapplication.loader;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.support.v4.content.AsyncTaskLoader;
 
 import com.example.vanahel.tasksmanagerapplication.dao.TaskDAO;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
