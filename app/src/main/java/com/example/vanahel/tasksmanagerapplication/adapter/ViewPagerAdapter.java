@@ -9,21 +9,20 @@ import com.example.vanahel.tasksmanagerapplication.tab.FavoriteTabFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    int tabCount;
+    private static final int TAB_COUNT = 2;
 
-    public ViewPagerAdapter (FragmentManager fragmentManager, int tabCount) {
+    public ViewPagerAdapter (FragmentManager fragmentManager) {
         super(fragmentManager);
-        this.tabCount= tabCount;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                AllTabFragment allTabFragment = new AllTabFragment();
+                AllTabFragment allTabFragment = AllTabFragment.getAllTabFragment();
                 return allTabFragment;
             case 1:
-                FavoriteTabFragment favoriteTabFragment = new FavoriteTabFragment();
+                FavoriteTabFragment favoriteTabFragment = FavoriteTabFragment.getAllTabFragment();
                 return favoriteTabFragment;
             default:
                 return null;
@@ -31,9 +30,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     }
 
 
-
     @Override
     public int getCount() {
-        return tabCount;
+        return TAB_COUNT;
     }
 }

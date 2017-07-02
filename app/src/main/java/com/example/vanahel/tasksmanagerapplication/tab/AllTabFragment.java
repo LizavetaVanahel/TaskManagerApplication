@@ -21,6 +21,19 @@ public class AllTabFragment extends Fragment {
     private AsyncTaskLoaderCallbacks asyncTaskLoaderCallbacks;
     private ListView tasksList;
     private TasksArrayAdapter allTasksArrayAdapter;
+    private static AllTabFragment allTabFragment;
+
+    public AllTabFragment(){
+
+    }
+
+    public static AllTabFragment getAllTabFragment(){
+        if (allTabFragment == null){
+            allTabFragment = new AllTabFragment();
+        }
+
+        return allTabFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +46,8 @@ public class AllTabFragment extends Fragment {
         tasksList.setOnItemClickListener(taskListItemClickListener);
         return view;
     }
+
+
 
     @Override
     public void onResume() {

@@ -21,6 +21,19 @@ public class FavoriteTabFragment extends Fragment {
     private FavoriteAsyncTasksLoaderCallbacks asyncTaskLoaderCallbacks;
     private ListView favoriteTaskList;
     private TasksArrayAdapter favoriteTaskArrayAdapter;
+    private static FavoriteTabFragment favoriteTabFragment;
+
+    public FavoriteTabFragment(){
+
+    }
+
+    public static FavoriteTabFragment getAllTabFragment(){
+        if (favoriteTabFragment == null){
+            favoriteTabFragment = new FavoriteTabFragment();
+        }
+
+        return favoriteTabFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

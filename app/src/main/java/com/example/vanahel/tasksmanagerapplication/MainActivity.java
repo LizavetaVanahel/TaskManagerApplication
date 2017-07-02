@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         viewPager = (ViewPager) findViewById(R.id.pager);
 
         ViewPagerAdapter viewPagerAdapter =
-                new ViewPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+                new ViewPagerAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(viewPagerAdapter);
 
