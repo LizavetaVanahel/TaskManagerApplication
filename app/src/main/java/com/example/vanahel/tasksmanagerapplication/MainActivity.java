@@ -37,10 +37,11 @@ public class MainActivity extends AppCompatActivity
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Tab1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab2"));
+        tabLayout.addTab(tabLayout.newTab().setText("All"));
+        tabLayout.addTab(tabLayout.newTab().setText("Favorite"));
 
         viewPager = (ViewPager) findViewById(R.id.pager);
+
 
         ViewPagerAdapter viewPagerAdapter =
                 new ViewPagerAdapter(getSupportFragmentManager());
@@ -59,8 +60,10 @@ public class MainActivity extends AppCompatActivity
                 new NewTaskButtonListener(this, viewPager);
         createNewTaskButton.setOnClickListener(newTaskButtonListener);
 
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
     }
+
 
         @NonNull
         @Override
@@ -85,7 +88,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         viewPager.setCurrentItem(tab.getPosition());
-
     }
 
     @Override
