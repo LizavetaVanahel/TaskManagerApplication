@@ -1,26 +1,31 @@
-package com.example.vanahel.tasksmanagerapplication.event.listener;
+package com.example.vanahel.tasksmanagerapplication.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.view.View;
+import android.support.v4.app.Fragment;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.vanahel.tasksmanagerapplication.NewTaskActivity;
 import com.example.vanahel.tasksmanagerapplication.R;
 import com.example.vanahel.tasksmanagerapplication.constants.ExtrasConstants;
+import com.example.vanahel.tasksmanagerapplication.contracts.TabFragmentContract;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
-public class TaskListItemClickListener implements AdapterView.OnItemClickListener {
+import static com.example.vanahel.tasksmanagerapplication.constants.LoaderConstants.ALL_TASKS_LOADER_ID;
+
+public class TabFragmentPresenter implements TabFragmentContract.Presenter {
 
     private Activity activity;
+    private Fragment fragment;
 
-    public TaskListItemClickListener (Activity activity){
+    public TabFragmentPresenter (Activity activity, Fragment fragment){
         this.activity = activity;
+        this.fragment = fragment;
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+    public void onTaskListItemClicked(AdapterView adapterView, int position) {
         Task task = (Task) adapterView.getItemAtPosition(position);
         TextView title = (TextView) adapterView.findViewById(R.id.title_item);
         TextView description = (TextView) adapterView.findViewById(R.id.description_item);
@@ -31,4 +36,12 @@ public class TaskListItemClickListener implements AdapterView.OnItemClickListene
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivityForResult(intent, 0);
     }
+
+    @Override
+    public void loadTask(android.support.v4.app.LoaderManager.LoaderCallbacks asyncTaskLoaderCallbacks) {
+        fragment.getLoaderManager().
+                restartLoader( ALL_TASKS_LOADER_ID, null, asyncTaskLoaderCallbacks ).forceLoad();
+    }
+
+
 }
