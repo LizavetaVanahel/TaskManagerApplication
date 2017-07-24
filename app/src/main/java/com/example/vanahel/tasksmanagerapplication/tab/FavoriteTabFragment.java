@@ -16,20 +16,24 @@ import com.example.vanahel.tasksmanagerapplication.dao.TaskDAO;
 import com.example.vanahel.tasksmanagerapplication.loader.callback.FavoriteAsyncTasksLoaderCallbacks;
 import com.example.vanahel.tasksmanagerapplication.presenter.TabFragmentPresenter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class FavoriteTabFragment extends Fragment implements TabFragmentContract.View{
 
     private FavoriteAsyncTasksLoaderCallbacks asyncTaskLoaderCallbacks;
     private TasksArrayAdapter favoriteTaskArrayAdapter;
     private static FavoriteTabFragment favoriteTabFragment;
     private TabFragmentPresenter presenter;
-    private ListView favoriteTaskList;
+    @BindView(R.id.favorite_tab_list_view)
+    ListView favoriteTaskList;
 
     public FavoriteTabFragment(){
 
     }
 
     public static FavoriteTabFragment getAllTabFragment(){
-        if (favoriteTabFragment == null){
+        if ( favoriteTabFragment == null ){
             favoriteTabFragment = new FavoriteTabFragment();
         }
 
@@ -37,18 +41,18 @@ public class FavoriteTabFragment extends Fragment implements TabFragmentContract
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         View view = inflater.inflate(R.layout.favorite_tasks_tab, container, false);
-        favoriteTaskList = (ListView) view.findViewById(R.id.favorite_tab_list_view);
+        ButterKnife.bind( this, view );
         favoriteTaskArrayAdapter = new TasksArrayAdapter(getActivity(), FavoriteTabFragment.this);
         TaskDAO taskDAO = DAOManager.getInstance().getTaskDAO();
-        asyncTaskLoaderCallbacks = new FavoriteAsyncTasksLoaderCallbacks(getActivity(),
-                taskDAO, favoriteTaskArrayAdapter);
-        presenter = new TabFragmentPresenter(getActivity(), this);
+        asyncTaskLoaderCallbacks = new FavoriteAsyncTasksLoaderCallbacks( getActivity(),
+                taskDAO, favoriteTaskArrayAdapter );
+        presenter = new TabFragmentPresenter( getActivity(), this );
         favoriteTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                onTaskItemClick(adapterView, position);
+                presenter.onTaskListItemClicked( adapterView, position );
             }
         });
         return view;
@@ -58,12 +62,8 @@ public class FavoriteTabFragment extends Fragment implements TabFragmentContract
     public void onResume() {
         super.onResume();
 
-        presenter.loadTask(asyncTaskLoaderCallbacks);
-        favoriteTaskList.setAdapter(favoriteTaskArrayAdapter);
+        presenter.loadTask( asyncTaskLoaderCallbacks );
+        favoriteTaskList.setAdapter( favoriteTaskArrayAdapter );
     }
 
-    @Override
-    public void onTaskItemClick(AdapterView adapterView, int position) {
-        presenter.onTaskListItemClicked(adapterView, position);
-    }
 }

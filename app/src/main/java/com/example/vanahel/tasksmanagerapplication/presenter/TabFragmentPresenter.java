@@ -3,6 +3,7 @@ package com.example.vanahel.tasksmanagerapplication.presenter;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
@@ -19,26 +20,26 @@ public class TabFragmentPresenter implements TabFragmentContract.Presenter {
     private Activity activity;
     private Fragment fragment;
 
-    public TabFragmentPresenter (Activity activity, Fragment fragment){
+    public TabFragmentPresenter ( Activity activity, Fragment fragment ){
         this.activity = activity;
         this.fragment = fragment;
     }
 
     @Override
-    public void onTaskListItemClicked(AdapterView adapterView, int position) {
+    public void onTaskListItemClicked( AdapterView adapterView, int position ) {
         Task task = (Task) adapterView.getItemAtPosition(position);
         TextView title = (TextView) adapterView.findViewById(R.id.title_item);
         TextView description = (TextView) adapterView.findViewById(R.id.description_item);
-        title.setText(task.getTitle());
-        description.setText(task.getDescription());
-        Intent intent = new Intent(activity, NewTaskActivity.class);
-        intent.putExtra(ExtrasConstants.TASK_EXTRAS, task);
+        title.setText( task.getTitle() );
+        description.setText( task.getDescription() );
+        Intent intent = new Intent( activity, NewTaskActivity.class );
+        intent.putExtra( ExtrasConstants.TASK_EXTRAS, task );
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivityForResult(intent, 0);
     }
 
     @Override
-    public void loadTask(android.support.v4.app.LoaderManager.LoaderCallbacks asyncTaskLoaderCallbacks) {
+    public void loadTask( LoaderManager.LoaderCallbacks asyncTaskLoaderCallbacks ) {
         fragment.getLoaderManager().
                 restartLoader( ALL_TASKS_LOADER_ID, null, asyncTaskLoaderCallbacks ).forceLoad();
     }

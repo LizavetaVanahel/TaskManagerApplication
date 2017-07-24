@@ -12,7 +12,7 @@ public class TasksAsyncTaskLoader extends AsyncTaskLoader< List<Task> > {
 
     private TaskDAO taskDAO;
 
-    public TasksAsyncTaskLoader(Context context, TaskDAO taskDAO) {
+    public TasksAsyncTaskLoader( Context context, TaskDAO taskDAO ) {
         super(context);
         this.taskDAO = taskDAO;
     }

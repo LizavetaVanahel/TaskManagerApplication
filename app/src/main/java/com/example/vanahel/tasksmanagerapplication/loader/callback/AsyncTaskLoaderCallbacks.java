@@ -19,26 +19,26 @@ public class AsyncTaskLoaderCallbacks implements LoaderManager.LoaderCallbacks< 
     private TaskDAO taskDAO;
     private TasksArrayAdapter tasksArrayAdapter;
 
-    public AsyncTaskLoaderCallbacks (Activity activity, TaskDAO taskDAO,
-                                     TasksArrayAdapter tasksArrayAdapter){
+    public AsyncTaskLoaderCallbacks ( Activity activity, TaskDAO taskDAO,
+                                     TasksArrayAdapter tasksArrayAdapter ){
         this.activity = activity;
         this.taskDAO = taskDAO;
         this.tasksArrayAdapter = tasksArrayAdapter;
     }
 
     @Override
-    public Loader<List<Task>> onCreateLoader(int i, Bundle bundle) {
-        return new TasksAsyncTaskLoader(activity, taskDAO);
+    public Loader<List<Task>> onCreateLoader( int i, Bundle bundle ) {
+        return new TasksAsyncTaskLoader( activity, taskDAO );
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Task> > loader, List<Task> task) {
+    public void onLoadFinished( Loader<List<Task> > loader, List<Task> task ) {
         tasksArrayAdapter.setTask(task);
     }
 
     @Override
-    public void onLoaderReset(Loader< List<Task> > loader) {
-        tasksArrayAdapter.setTask(new ArrayList<Task>());
+    public void onLoaderReset( Loader< List<Task> > loader ) {
+        tasksArrayAdapter.setTask( new ArrayList<Task>() );
     }
 
 }

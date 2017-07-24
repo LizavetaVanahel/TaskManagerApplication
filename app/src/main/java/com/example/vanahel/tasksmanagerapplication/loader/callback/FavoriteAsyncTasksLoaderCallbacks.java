@@ -19,25 +19,25 @@ public class FavoriteAsyncTasksLoaderCallbacks implements LoaderManager.LoaderCa
     private TaskDAO taskDAO;
     private TasksArrayAdapter favoriteTasksArrayAdapter;
 
-    public FavoriteAsyncTasksLoaderCallbacks (Activity activity, TaskDAO taskDAO,
-                                              TasksArrayAdapter favoriteTasksArrayAdapter){
+    public FavoriteAsyncTasksLoaderCallbacks ( Activity activity, TaskDAO taskDAO,
+                                              TasksArrayAdapter favoriteTasksArrayAdapter ){
         this.activity = activity;
         this.taskDAO = taskDAO;
         this.favoriteTasksArrayAdapter = favoriteTasksArrayAdapter;
     }
 
     @Override
-    public Loader<List<Task>> onCreateLoader(int i, Bundle bundle) {
-        return new FavoriteAsyncTaskLoader(activity, taskDAO);
+    public Loader<List<Task>> onCreateLoader( int i, Bundle bundle ) {
+        return new FavoriteAsyncTaskLoader( activity, taskDAO );
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Task>> loader, List<Task> task) {
+    public void onLoadFinished( Loader<List<Task>> loader, List<Task> task ) {
                 favoriteTasksArrayAdapter.setTask(task);
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Task>> loader) {
-        favoriteTasksArrayAdapter.setTask(new ArrayList<Task>());
+    public void onLoaderReset( Loader<List<Task>> loader ) {
+        favoriteTasksArrayAdapter.setTask( new ArrayList<Task>() );
     }
 }

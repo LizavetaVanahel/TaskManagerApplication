@@ -11,8 +11,9 @@ public class MemoryDAO  implements TaskDAO {
     private List<Task> tasksList = new ArrayList<>();
 
     @Override
-    public void save(Task task) {
-        tasksList.add( new Task (task.getTitle(), task.getDescription(), task.getFavorite(), task.getId()) );
+    public void save( Task task ) {
+        tasksList.add( new Task (task.getTitle(), task.getDescription(), task.getFavorite(),
+                task.getId()) );
     }
 
     @Override
@@ -32,7 +33,7 @@ public class MemoryDAO  implements TaskDAO {
     }
 
     @Override
-    public void delete(Task task) throws IOException {
+    public void delete( Task task ) throws IOException {
         for ( int i = 0; i < tasksList.size(); i++ ) {
             if ( tasksList.get(i).getId().equals(task.getId()) ) {
                 tasksList.remove(i);
@@ -41,11 +42,11 @@ public class MemoryDAO  implements TaskDAO {
     }
 
     @Override
-    public void updateTask(Task newTask, Task oldTask) throws IOException {
+    public void updateTask( Task newTask, Task oldTask ) throws IOException {
         for ( int i = 0; i < tasksList.size(); i++ ) {
             if ( tasksList.get(i).getId().equals(oldTask.getId()) ) {
                 tasksList.remove(i);
-                tasksList.add(i, newTask);
+                tasksList.add( i, newTask );
             }
         }
     }

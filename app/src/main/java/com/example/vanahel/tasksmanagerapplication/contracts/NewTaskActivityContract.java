@@ -7,21 +7,19 @@ public interface NewTaskActivityContract {
 
     interface View {
 
-        void onSaveButtonClick();
-
         Task getTask ();
 
-        void setTask (Task task);
+        void setTask ( Task task );
 
     }
 
     interface Presenter {
 
-        void onSaveButtonCLicked(Task task, Boolean savedIsFavorite, String savedId);
+        void onSaveButtonCLicked( Task task, Boolean savedIsFavorite, String savedId );
 
         Task getTask ();
 
-        void setTask (Task task);
+        void setTask ( Task task );
 
     }
 }

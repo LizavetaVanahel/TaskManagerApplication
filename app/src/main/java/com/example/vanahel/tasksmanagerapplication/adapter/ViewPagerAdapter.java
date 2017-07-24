@@ -12,13 +12,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     private Fragment fragment = null;
     private static final int TAB_COUNT = 2;
 
-    public ViewPagerAdapter (FragmentManager fragmentManager) {
-        super(fragmentManager);
+    public ViewPagerAdapter ( FragmentManager fragmentManager ) {
+        super( fragmentManager );
     }
 
     @Override
-    public Fragment getItem(int position) {
-        switch (position) {
+    public Fragment getItem( int position ) {
+        switch ( position ) {
             case 0:
                 fragment = AllTabFragment.getAllTabFragment();
                 break;

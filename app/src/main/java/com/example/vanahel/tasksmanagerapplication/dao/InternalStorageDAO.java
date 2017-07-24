@@ -1,6 +1,7 @@
 package com.example.vanahel.tasksmanagerapplication.dao;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
@@ -20,6 +21,7 @@ public class InternalStorageDAO implements TaskDAO {
     private Context context;
     private final static String INTERNAL_TASK_FILE_NAME = "Task";
     private final static String COMMA = ",";
+    private static final String TAG = "InternalStorageDAO";
 
     public InternalStorageDAO(Context context){
         this.context = context;
@@ -36,7 +38,7 @@ public class InternalStorageDAO implements TaskDAO {
             writer.newLine();
             writer.close();
         } catch (IOException e) {
-            System.out.println("File is not created");
+            Log.e(TAG, "File is not created");
         }
     }
 
@@ -53,14 +55,14 @@ public class InternalStorageDAO implements TaskDAO {
                 taskList.add( buildTaskFromStr(dataRow) );
             }
 
-        } catch (IOException e) {
-            System.out.println("File is not created");
+        } catch ( IOException e ) {
+            Log.e(TAG, "File is not created");
         } finally {
             try {
                 if ( myReader != null ) {
                     myReader.close();
                 }
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 e.printStackTrace();
             }
         }
@@ -68,8 +70,8 @@ public class InternalStorageDAO implements TaskDAO {
         return taskList;
     }
 
-    private Task buildTaskFromStr(String taskCSV) {
-        String[] taskProps = taskCSV.split(COMMA);
+    private Task buildTaskFromStr( String taskCSV ) {
+        String[] taskProps = taskCSV.split( COMMA );
         return new Task( taskProps[0], taskProps[1], taskProps[2].equals("1"), taskProps[3] );
     }
 
@@ -81,22 +83,22 @@ public class InternalStorageDAO implements TaskDAO {
 
         try {
             File taskFile = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
-            FileInputStream fileInputStream = new FileInputStream(taskFile);
-            myReader = new BufferedReader( new InputStreamReader(fileInputStream) );
+            FileInputStream fileInputStream = new FileInputStream( taskFile );
+            myReader = new BufferedReader( new InputStreamReader( fileInputStream ) );
             while ( (dataRow = myReader.readLine()) != null ) {
-                String[] task = dataRow.split(COMMA);
+                String[] task = dataRow.split( COMMA );
                 if ( task[2].contains("1") ) {
-                    taskList.add(buildTaskFromStr(dataRow));
+                    taskList.add(buildTaskFromStr( dataRow ));
                 }
             }
-        } catch (IOException e) {
-            System.out.println("File is not created");
+        } catch ( IOException e ) {
+            Log.e(TAG, "File is not created");
         } finally {
             try {
-                if (myReader != null) {
+                if ( myReader != null ) {
                     myReader.close();
                 }
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 e.printStackTrace();
             }
         }
@@ -104,7 +106,7 @@ public class InternalStorageDAO implements TaskDAO {
     }
 
     @Override
-    public void delete(Task task) throws IOException {
+    public void delete( Task task ) throws IOException {
         File taskFile = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
         FileInputStream fIn = new FileInputStream(taskFile);
         BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn) );
@@ -114,7 +116,7 @@ public class InternalStorageDAO implements TaskDAO {
         while ( (line = myReader.readLine()) != null ) {
             String[] taskString = line.split(COMMA);
             if ( taskString[3].equals(task.getId()) ){
-                System.out.println("Line deleted.");
+                Log.d(TAG, "Line deleted.");
             } else {
                 input += line + System.lineSeparator();
             }

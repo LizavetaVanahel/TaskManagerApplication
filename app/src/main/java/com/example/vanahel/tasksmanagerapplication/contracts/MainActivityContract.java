@@ -4,8 +4,6 @@ public interface MainActivityContract {
 
     interface View {
 
-        void onNewTaskButtonClick();
-
     }
 
     interface Presenter {

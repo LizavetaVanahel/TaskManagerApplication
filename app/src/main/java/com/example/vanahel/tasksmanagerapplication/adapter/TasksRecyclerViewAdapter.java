@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import com.example.vanahel.tasksmanagerapplication.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by dvkoleda on 29.06.17.
  */
@@ -18,15 +21,15 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
     private String[] dataset;
 
     public static class TasksViewHolder extends RecyclerView.ViewHolder {
-        public CardView cardView;
-        public TextView textView;
+        @BindView(R.id.card_view)
+        CardView cardView;
+        @BindView(R.id.title_item)
+        TextView title;
+        @BindView(R.id.description_item)
+        TextView description;
         public TasksViewHolder (View view) {
             super(view);
-
-            cardView = (CardView) view.findViewById(R.id.card_view);
-            textView = (TextView) view.findViewById(R.id.title_item);
-            textView = (TextView) view.findViewById(R.id.description_item);
-
+            ButterKnife.bind(this, view);
         }
     }
 
@@ -44,7 +47,8 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
     @Override
     public void onBindViewHolder(TasksViewHolder holder, final int position) {
-        holder.textView.setText(dataset [position]);
+        holder.title.setText(dataset [position]);
+        holder.description.setText(dataset [position]);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,6 +1,7 @@
 package com.example.vanahel.tasksmanagerapplication.dao;
 
 import android.os.Environment;
+import android.util.Log;
 
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
@@ -19,6 +20,7 @@ public class ExternalStorageDAO implements TaskDAO {
     private final static String APP_DIR_NAME = "Tasks";
     private final static String EXTERNAL_TASK_FILE_NAME = "task.csv";
     private final static String COMMA = ",";
+    private static final String TAG = "ExternalStorageDAO";
 
     @Override
     public void save(Task task) {
@@ -36,7 +38,7 @@ public class ExternalStorageDAO implements TaskDAO {
             writer.newLine();
             writer.close();
         } catch (IOException e) {
-            System.out.println("File is not created");
+            Log.e(TAG, "File is not created");
         }
     }
 
@@ -87,7 +89,7 @@ public class ExternalStorageDAO implements TaskDAO {
                 }
             }
         } catch (IOException e) {
-            System.out.println("File is not created");
+            Log.e(TAG, "File is not created");
         } finally {
             try {
                 if (myReader != null) {
@@ -118,7 +120,7 @@ public class ExternalStorageDAO implements TaskDAO {
         while ( (line = myReader.readLine()) != null ) {
             String[] taskString = line.split(COMMA);
                 if ( taskString[3].equals(task.getId()) ) {
-                    System.out.println("Line deleted.");
+                    Log.d(TAG, "Line deleted.");
                 } else {
                     input += line + System.lineSeparator();
                 }

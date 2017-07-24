@@ -13,7 +13,7 @@ public class DAOManager {
         return DAOManager.DAOManagerInstance;
     }
 
-    public void setTaskDAO(TaskDAO taskDAO){
+    public void setTaskDAO( TaskDAO taskDAO ){
         this.taskDAO = taskDAO;
     }
 

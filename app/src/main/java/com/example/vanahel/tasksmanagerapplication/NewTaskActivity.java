@@ -2,6 +2,7 @@ package com.example.vanahel.tasksmanagerapplication;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +25,7 @@ public class NewTaskActivity extends ActionBarActivity implements NewTaskActivit
     @BindView(R.id.description_et) EditText description;
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
+    public void onCreate( final Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
         ButterKnife.bind(this);
@@ -35,21 +36,16 @@ public class NewTaskActivity extends ActionBarActivity implements NewTaskActivit
             task = getTask();
             setTask(task);
         }catch (Exception e){
-            System.out.println("The fields are empty");
+            Log.d("Empty field","The fields are empty");
 
         }
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onSaveButtonClick();
+                presenter.onSaveButtonCLicked( task, savedIsFavorite, savedId );
             }
         });
-    }
-
-    @Override
-    public void onSaveButtonClick() {
-        presenter.onSaveButtonCLicked(task, savedIsFavorite, savedId);
     }
 
     @Override

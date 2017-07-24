@@ -21,23 +21,23 @@ public class TasksApplication extends Application {
         if ( settingsPreferences !=null ) {
             switch (settingsPreferences) {
                 case SettingsConstants.SHARED_PREFERENCES:
-                    DAOManager.getInstance().setTaskDAO(new SharedPreferencesDAO(this));
+                    DAOManager.getInstance().setTaskDAO( new SharedPreferencesDAO(this) );
                     break;
                 case SettingsConstants.DATABASE:
-                    DAOManager.getInstance().setTaskDAO(new DatabaseDAO(this));
+                    DAOManager.getInstance().setTaskDAO( new DatabaseDAO(this) );
                     break;
                 case SettingsConstants.INTERNAL_STORAGE:
-                    DAOManager.getInstance().setTaskDAO(new InternalStorageDAO(this));
+                    DAOManager.getInstance().setTaskDAO( new InternalStorageDAO(this) );
                     break;
                 case SettingsConstants.EXTERNAL_STORAGE:
-                    DAOManager.getInstance().setTaskDAO(new ExternalStorageDAO());
+                    DAOManager.getInstance().setTaskDAO( new ExternalStorageDAO() );
                     break;
                 case SettingsConstants.MEMORY:
-                    DAOManager.getInstance().setTaskDAO(new MemoryDAO());
+                    DAOManager.getInstance().setTaskDAO( new MemoryDAO() );
                     break;
             }
         } else {
-            DAOManager.getInstance().setTaskDAO(new DatabaseDAO(this));
+            DAOManager.getInstance().setTaskDAO( new DatabaseDAO(this)) ;
         }
     }
 }

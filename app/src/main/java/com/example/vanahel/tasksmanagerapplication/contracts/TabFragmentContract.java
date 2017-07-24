@@ -7,17 +7,13 @@ import android.widget.AdapterView;
 
         interface View {
 
-            void onTaskItemClick(AdapterView adapterView, int position);
-
-            void onResume();
-
         }
 
         interface Presenter {
 
-            void onTaskListItemClicked(AdapterView adapterView, int position);
+            void onTaskListItemClicked( AdapterView adapterView, int position );
 
-            void loadTask(LoaderManager.LoaderCallbacks asyncTaskLoaderCallbacks);
+            void loadTask( LoaderManager.LoaderCallbacks asyncTaskLoaderCallbacks );
         }
 
     }

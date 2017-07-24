@@ -2,6 +2,7 @@ package com.example.vanahel.tasksmanagerapplication.dao;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
@@ -16,13 +17,15 @@ public class SharedPreferencesDAO implements TaskDAO {
     private final static String SHARED_PREFERENCES_VARIABLE = "taskList";
     private final static String COMMA = ",";
     private Context context;
+    private static final String TAG = "SharedPreferencesDAO";
 
-    public SharedPreferencesDAO(Context context) {
+
+    public SharedPreferencesDAO( Context context ) {
         this.context = context;
     }
 
     @Override
-    public void save(Task task) {
+    public void save( Task task ) {
 
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences( SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE );
@@ -51,10 +54,11 @@ public class SharedPreferencesDAO implements TaskDAO {
                 if ( taskValues.length == 0 ) {
                     continue;
                 }
-                tasksList.add( new Task( taskValues[0], taskValues[1], taskValues[2].equals("1"),taskValues[3]) );
+                tasksList.add( new Task( taskValues[0], taskValues[1], taskValues[2].equals("1"),
+                        taskValues[3]) );
             }
-        }catch (Exception e){
-            System.out.println("Shared preferences is empty");
+        }catch ( Exception e ){
+            Log.e(TAG, "Shared preferences is empty");
         }
         return tasksList;
     }
@@ -80,7 +84,7 @@ public class SharedPreferencesDAO implements TaskDAO {
                 }
             }
         }catch (Exception e){
-            System.out.println("Shared preferences is empty");
+            Log.e(TAG, "Shared preferences is empty");
         }
 
         return favoriteTasksList;
@@ -115,7 +119,7 @@ public class SharedPreferencesDAO implements TaskDAO {
     }
 
     @Override
-    public void updateTask(Task newTask, Task oldTask) {
+    public void updateTask( Task newTask, Task oldTask ) {
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences( SHARED_PREFERENCES_STORAGE, Context.MODE_PRIVATE );
         String tasksString = sharedPreferences.getString( SHARED_PREFERENCES_VARIABLE, "" );
@@ -131,7 +135,7 @@ public class SharedPreferencesDAO implements TaskDAO {
             String description = values[1];
             Boolean isFavorite = values[2].equals("1");
             String id = values[3];
-            Task currentTask =  new Task (title, description, isFavorite, id);
+            Task currentTask =  new Task ( title, description, isFavorite, id );
             if ( currentTask.getId().equals(oldTask.getId()) ) {
                 newCreatedStr += newTask;
             } else {

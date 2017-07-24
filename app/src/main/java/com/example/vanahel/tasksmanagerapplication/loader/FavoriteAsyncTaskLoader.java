@@ -12,7 +12,7 @@ public class FavoriteAsyncTaskLoader extends AsyncTaskLoader< List<Task> > {
 
     private TaskDAO taskDAO;
 
-    public FavoriteAsyncTaskLoader(Context context, TaskDAO taskDAO) {
+    public FavoriteAsyncTaskLoader( Context context, TaskDAO taskDAO ) {
         super(context);
         this.taskDAO = taskDAO;
     }

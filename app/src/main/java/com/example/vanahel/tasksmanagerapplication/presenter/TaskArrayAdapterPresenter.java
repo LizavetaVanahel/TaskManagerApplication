@@ -7,29 +7,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.vanahel.tasksmanagerapplication.context.provider.ListItemMenuContextProvider;
 import com.example.vanahel.tasksmanagerapplication.R;
 import com.example.vanahel.tasksmanagerapplication.contracts.TaskArrayAdapterContract;
+import com.example.vanahel.tasksmanagerapplication.dao.DAOManager;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
+import java.io.IOException;
 
-public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Presenter {
+
+public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Presenter,
+        TaskArrayAdapterContract.Menu {
 
     private Activity activity;
     private Task task;
-    private TaskArrayAdapterMenu menu;
     private Fragment fragment;
+    private ListItemMenuContextProvider listItemMenuContextProvider = new ListItemMenuContextProvider();
 
-    public TaskArrayAdapterPresenter (Activity activity, Task task, Fragment fragment) {
+    public TaskArrayAdapterPresenter ( Activity activity, Task task, Fragment fragment ) {
         this.activity = activity;
         this.task = task;
         this.fragment = fragment;
     }
 
     @Override
-    public void onMenuButtonClicked(View view) {
+    public void onMenuButtonClicked( View view ) {
         Button menuButton = (Button) view.findViewById(R.id.list_item_menu_button);
         PopupMenu popup = new PopupMenu(activity, menuButton);
-        if (!task.getFavorite()) {
+        if ( !task.getFavorite() ) {
             popup.getMenuInflater().inflate(R.menu.popupmenu, popup.getMenu());
         } else {
             popup.getMenuInflater().inflate(R.menu.favorite_popupmenu, popup.getMenu());
@@ -37,19 +42,18 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
 
             public boolean onMenuItemClick(MenuItem item) {
-                menu = new TaskArrayAdapterMenu(activity, task, fragment);
-                switch (item.getItemId()){
+                switch ( item.getItemId() ){
                     case R.id.edit:
-                        menu.edit();
+                        edit();
                         break;
                     case R.id.delete:
-                       menu.delete();
+                       delete();
                         break;
                     case R.id.add_to_favorite:
-                        menu.addToFavorite();
+                        addToFavorite();
                         break;
                     case R.id.delete_from_favorite:
-                        menu.removeFromFavorite();
+                        removeFromFavorite();
                     default:
                         break;
                 }
@@ -57,5 +61,42 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
             }
         });
         popup.show();
+    }
+
+
+    @Override
+    public void edit() {
+      listItemMenuContextProvider.callStartActivityForResult(activity, task);
+    }
+
+    @Override
+    public void delete() {
+        try {
+            DAOManager.getInstance().getTaskDAO().delete(task);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        listItemMenuContextProvider.callFragmentOnResume(fragment);
+    }
+
+    @Override
+    public void addToFavorite() {
+        Task favoriteTask = new Task ( task.getTitle(), task.getDescription(), true, task.getId() );
+        try {
+            DAOManager.getInstance().getTaskDAO().updateTask( favoriteTask, task );
+        } catch (IOException e) {
+        }
+        listItemMenuContextProvider.callFragmentOnResume(fragment);
+    }
+
+    @Override
+    public void removeFromFavorite() {
+        Task simpleTask = new Task ( task.getTitle(), task.getDescription(), false, task.getId() );
+        try {
+            DAOManager.getInstance().getTaskDAO().updateTask( simpleTask, task );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        listItemMenuContextProvider.callFragmentOnResume(fragment);
     }
 }
