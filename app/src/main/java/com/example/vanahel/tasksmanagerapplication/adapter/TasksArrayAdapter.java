@@ -17,8 +17,6 @@ import com.example.vanahel.tasksmanagerapplication.task.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-
 public class TasksArrayAdapter extends BaseAdapter implements TaskArrayAdapterContract.View {
 
     private LayoutInflater layoutInflater;
@@ -36,7 +34,6 @@ public class TasksArrayAdapter extends BaseAdapter implements TaskArrayAdapterCo
 
     @Override
     public View getView( final int position, View convertView, final ViewGroup parent ) {
-        ButterKnife.bind( activity );
         if ( convertView == null ) {
             convertView = layoutInflater.inflate( R.layout.listview_item, parent, false );
         }
@@ -45,11 +42,10 @@ public class TasksArrayAdapter extends BaseAdapter implements TaskArrayAdapterCo
         final TextView description = (TextView) convertView.findViewById(R.id.description_item);
         final Button menuButton = (Button) convertView.findViewById(R.id.list_item_menu_button);
 
-        presenter = new TaskArrayAdapterPresenter( activity, task, fragment );
-
         title.setText( task.getTitle() );
         description.setText( task.getDescription() );
 
+        presenter = new TaskArrayAdapterPresenter( activity, task, fragment );
 
         menuButton.setOnClickListener( new View.OnClickListener() {
             @Override

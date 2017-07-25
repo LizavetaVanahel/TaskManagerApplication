@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.vanahel.tasksmanagerapplication.tab.AllTabFragment;
-import com.example.vanahel.tasksmanagerapplication.tab.FavoriteTabFragment;
+import com.example.vanahel.tasksmanagerapplication.tab.AllTabFragmentProvider;
+import com.example.vanahel.tasksmanagerapplication.tab.FavoriteTabFragmentProvider;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -20,10 +20,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem( int position ) {
         switch ( position ) {
             case 0:
-                fragment = AllTabFragment.getAllTabFragment();
+                fragment = AllTabFragmentProvider.getAllTabFragment();
                 break;
             case 1:
-                fragment = FavoriteTabFragment.getAllTabFragment();
+                fragment = FavoriteTabFragmentProvider.getFavoriteTabFragment();
                 break;
         }
 

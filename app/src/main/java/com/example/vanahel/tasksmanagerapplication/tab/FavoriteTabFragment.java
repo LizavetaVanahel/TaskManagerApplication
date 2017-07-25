@@ -23,22 +23,9 @@ public class FavoriteTabFragment extends Fragment implements TabFragmentContract
 
     private FavoriteAsyncTasksLoaderCallbacks asyncTaskLoaderCallbacks;
     private TasksArrayAdapter favoriteTaskArrayAdapter;
-    private static FavoriteTabFragment favoriteTabFragment;
     private TabFragmentPresenter presenter;
     @BindView(R.id.favorite_tab_list_view)
     ListView favoriteTaskList;
-
-    public FavoriteTabFragment(){
-
-    }
-
-    public static FavoriteTabFragment getAllTabFragment(){
-        if ( favoriteTabFragment == null ){
-            favoriteTabFragment = new FavoriteTabFragment();
-        }
-
-        return favoriteTabFragment;
-    }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {

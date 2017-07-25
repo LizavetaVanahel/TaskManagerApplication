@@ -23,30 +23,16 @@ public class AllTabFragment extends Fragment implements TabFragmentContract.View
 
     private AsyncTaskLoaderCallbacks asyncTaskLoaderCallbacks;
     private TasksArrayAdapter allTasksArrayAdapter;
-    private static AllTabFragment allTabFragment;
     private TabFragmentPresenter presenter;
-    private TaskDAO taskDAO;
     @BindView(R.id.simple_tab_list_view)
-    ListView tasksList;
-
-    public AllTabFragment(){
-
-    }
-
-    public static AllTabFragment getAllTabFragment(){
-        if ( allTabFragment == null ){
-            allTabFragment = new AllTabFragment();
-        }
-
-        return allTabFragment;
-    }
+    protected ListView tasksList;
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         View view = inflater.inflate(R.layout.all_tasks_tab, container, false);
         ButterKnife.bind( this, view );
         allTasksArrayAdapter = new TasksArrayAdapter(getActivity(), AllTabFragment.this);
-        taskDAO = DAOManager.getInstance().getTaskDAO();
+        TaskDAO taskDAO = DAOManager.getInstance().getTaskDAO();
         asyncTaskLoaderCallbacks = new AsyncTaskLoaderCallbacks( getActivity(),
                 taskDAO, allTasksArrayAdapter );
         presenter = new TabFragmentPresenter(getActivity(), this);
@@ -67,5 +53,4 @@ public class AllTabFragment extends Fragment implements TabFragmentContract.View
         tasksList.setAdapter( allTasksArrayAdapter );
 
     }
-
 }
