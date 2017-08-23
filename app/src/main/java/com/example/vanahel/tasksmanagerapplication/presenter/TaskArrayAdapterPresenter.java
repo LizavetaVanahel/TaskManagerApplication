@@ -1,18 +1,23 @@
 package com.example.vanahel.tasksmanagerapplication.presenter;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.vanahel.tasksmanagerapplication.context.provider.ListItemMenuContextProvider;
 import com.example.vanahel.tasksmanagerapplication.R;
+import com.example.vanahel.tasksmanagerapplication.ScreenshotUtils;
+import com.example.vanahel.tasksmanagerapplication.context.provider.ListItemMenuContextProvider;
 import com.example.vanahel.tasksmanagerapplication.contracts.TaskArrayAdapterContract;
 import com.example.vanahel.tasksmanagerapplication.dao.DAOManager;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -24,30 +29,31 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
     private Fragment fragment;
     private ListItemMenuContextProvider listItemMenuContextProvider = new ListItemMenuContextProvider();
 
-    public TaskArrayAdapterPresenter ( Activity activity, Task task, Fragment fragment ) {
+
+    public TaskArrayAdapterPresenter(Activity activity, Task task, Fragment fragment) {
         this.activity = activity;
         this.task = task;
         this.fragment = fragment;
     }
 
     @Override
-    public void onMenuButtonClicked( View view ) {
+    public void onMenuButtonClicked(View view) {
         Button menuButton = (Button) view.findViewById(R.id.list_item_menu_button);
         PopupMenu popup = new PopupMenu(activity, menuButton);
-        if ( !task.getFavorite() ) {
+        if (!task.getFavorite()) {
             popup.getMenuInflater().inflate(R.menu.popupmenu, popup.getMenu());
         } else {
             popup.getMenuInflater().inflate(R.menu.favorite_popupmenu, popup.getMenu());
         }
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
             public boolean onMenuItemClick(MenuItem item) {
-                switch ( item.getItemId() ){
+                switch (item.getItemId()) {
                     case R.id.edit:
                         edit();
                         break;
                     case R.id.delete:
-                       delete();
+                        delete();
                         break;
                     case R.id.add_to_favorite:
                         addToFavorite();
@@ -56,6 +62,8 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
                         removeFromFavorite();
                     default:
                         break;
+                    case R.id.share:
+                        share();
                 }
                 return true;
             }
@@ -66,7 +74,7 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
 
     @Override
     public void edit() {
-      listItemMenuContextProvider.callStartActivityForResult(activity, task);
+        listItemMenuContextProvider.callStartActivityForResult(activity, task);
     }
 
     @Override
@@ -81,9 +89,9 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
 
     @Override
     public void addToFavorite() {
-        Task favoriteTask = new Task ( task.getTitle(), task.getDescription(), true, task.getId() );
+        Task favoriteTask = new Task(task.getTitle(), task.getDescription(), true, task.getId());
         try {
-            DAOManager.getInstance().getTaskDAO().updateTask( favoriteTask, task );
+            DAOManager.getInstance().getTaskDAO().updateTask(favoriteTask, task);
         } catch (IOException e) {
         }
         listItemMenuContextProvider.callFragmentOnResume(fragment);
@@ -91,12 +99,42 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
 
     @Override
     public void removeFromFavorite() {
-        Task simpleTask = new Task ( task.getTitle(), task.getDescription(), false, task.getId() );
+        Task simpleTask = new Task(task.getTitle(), task.getDescription(), false, task.getId());
         try {
-            DAOManager.getInstance().getTaskDAO().updateTask( simpleTask, task );
+            DAOManager.getInstance().getTaskDAO().updateTask(simpleTask, task);
         } catch (IOException e) {
             e.printStackTrace();
         }
         listItemMenuContextProvider.callFragmentOnResume(fragment);
     }
-}
+
+    @Override
+    public void share() {
+        listItemMenuContextProvider.callStartActivityForResult(activity, task);
+        View rootView = activity.getWindow().getDecorView().getRootView();
+        File file = takeScreenshot(rootView);
+        shareScreenshot(file);
+    }
+
+    private File takeScreenshot(View rootView) {
+
+        Bitmap bitmap = ScreenshotUtils.getScreenShot(rootView);
+            File saveFile = ScreenshotUtils.getMainDirectoryName(activity);
+            File file = ScreenshotUtils.store( bitmap, "screenshot.jpg", saveFile );
+        return file;
+
+    }
+
+    private void shareScreenshot(File file) {
+        Uri uri = Uri.fromFile(file);
+        Intent intent = new Intent();
+        intent.setAction( Intent.ACTION_SEND );
+        intent.setType("image/*");
+        intent.putExtra( Intent.EXTRA_SUBJECT, "" );
+        intent.putExtra( Intent.EXTRA_TEXT, "" );
+        intent.putExtra( Intent.EXTRA_STREAM, uri );
+        activity.startActivity( Intent.createChooser(intent, "share") );
+    }
+
+    }
+

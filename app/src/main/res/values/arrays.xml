@@ -6,6 +6,7 @@
         <item>Database</item>
         <item>External Storage</item>
         <item>Internal Storage</item>
+        <item>Internet</item>
     </string-array>
 
     <string-array name="taskStorageData">
@@ -14,5 +15,6 @@
         <item>Database</item>
         <item>External Storage</item>
         <item>Internal Storage</item>
+        <item>Internet</item>
     </string-array>
 </resources>

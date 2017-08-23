@@ -29,14 +29,14 @@ public class NewTaskActivityPresenter implements NewTaskActivityContract.Present
     }
 
     @Override
-    public void onSaveButtonCLicked( Task task, Boolean savedIsFavorite, String savedId ) {
+    public void onSaveButtonCLicked(Task task) {
         String enteredTitle = title.getText().toString();
         String enteredDescription = description.getText().toString();
         Intent intent = new Intent(activity, MainActivity.class);
         if ( activity.getIntent().hasExtra( ExtrasConstants.TASK_EXTRAS ) ) {
             try {
                 DAOManager.getInstance().getTaskDAO().updateTask
-                        ( new Task( enteredTitle, enteredDescription, savedIsFavorite, savedId ), task );
+                        ( new Task( enteredTitle, enteredDescription, task.getFavorite(), task.getId() ), task );
             } catch (IOException e) {
                 e.printStackTrace();
             }

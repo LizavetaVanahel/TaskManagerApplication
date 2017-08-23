@@ -19,5 +19,7 @@ public interface TaskArrayAdapterContract {
 
         void removeFromFavorite();
 
+        void share();
+
     }
 }

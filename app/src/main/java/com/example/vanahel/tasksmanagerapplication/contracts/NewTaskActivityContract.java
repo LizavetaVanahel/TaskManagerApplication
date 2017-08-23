@@ -15,7 +15,7 @@ public interface NewTaskActivityContract {
 
     interface Presenter {
 
-        void onSaveButtonCLicked( Task task, Boolean savedIsFavorite, String savedId );
+        void onSaveButtonCLicked( Task task );
 
         Task getTask ();
 

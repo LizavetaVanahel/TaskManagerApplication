@@ -8,6 +8,7 @@ import com.example.vanahel.tasksmanagerapplication.dao.DAOManager;
 import com.example.vanahel.tasksmanagerapplication.dao.DatabaseDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.ExternalStorageDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.InternalStorageDAO;
+import com.example.vanahel.tasksmanagerapplication.dao.InternetDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.MemoryDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.SharedPreferencesDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.TaskDAO;
@@ -43,6 +44,9 @@ public class SettingsActivityPresenter implements SettingsActivityContract.Prese
                 taskDAO = new MemoryDAO();
                 DAOManager.getInstance().setTaskDAO(taskDAO);
                 break;
+            case  SettingsConstants.INTERNET:
+                taskDAO = new InternetDAO();
+                DAOManager.getInstance().setTaskDAO(taskDAO);
         }
     }
 }

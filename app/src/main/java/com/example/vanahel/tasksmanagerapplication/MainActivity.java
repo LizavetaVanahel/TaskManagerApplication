@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity
 
         tabLayout.setOnTabSelectedListener(this);
 
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle( this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close );
         drawer.setDrawerListener(toggle);

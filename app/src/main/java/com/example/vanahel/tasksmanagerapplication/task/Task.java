@@ -3,6 +3,8 @@ package com.example.vanahel.tasksmanagerapplication.task;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Task implements Parcelable {
 
     private String title;
@@ -20,6 +22,9 @@ public class Task implements Parcelable {
         }
     };
 
+    public Task() {
+
+    }
 
     public Task (String title, String description, boolean isFavorite, String id){
         this.title = title;
@@ -55,6 +60,7 @@ public class Task implements Parcelable {
         return isFavorite;
     }
 
+    @JsonIgnore
     public Integer getFavoriteAsInt() {
         return isFavorite ? 1 : 0;
     }
