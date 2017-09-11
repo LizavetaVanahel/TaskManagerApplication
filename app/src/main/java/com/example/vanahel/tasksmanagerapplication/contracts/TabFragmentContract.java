@@ -7,6 +7,8 @@ import android.widget.AdapterView;
 
         interface View {
 
+            void showExceptionMessage( String message );
+
         }
 
         interface Presenter {

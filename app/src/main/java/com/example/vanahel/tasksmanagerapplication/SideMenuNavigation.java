@@ -8,15 +8,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 
-public class SideMenuNavigation implements NavigationView.OnNavigationItemSelectedListener {
+class SideMenuNavigation implements NavigationView.OnNavigationItemSelectedListener {
 
     private Activity activity;
     private DrawerLayout drawer;
 
-    public SideMenuNavigation (Activity activity, DrawerLayout drawer){
+    SideMenuNavigation (Activity activity, DrawerLayout drawer){
         this.activity = activity;
         this.drawer = drawer;
-
     }
 
     @Override

@@ -7,11 +7,14 @@ import android.support.v4.app.LoaderManager;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.example.vanahel.tasksmanagerapplication.events.ExceptionMessageEvent;
 import com.example.vanahel.tasksmanagerapplication.NewTaskActivity;
 import com.example.vanahel.tasksmanagerapplication.R;
 import com.example.vanahel.tasksmanagerapplication.constants.ExtrasConstants;
 import com.example.vanahel.tasksmanagerapplication.contracts.TabFragmentContract;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
+
+import org.greenrobot.eventbus.EventBus;
 
 import static com.example.vanahel.tasksmanagerapplication.constants.LoaderConstants.ALL_TASKS_LOADER_ID;
 
@@ -40,9 +43,12 @@ public class TabFragmentPresenter implements TabFragmentContract.Presenter {
 
     @Override
     public void loadTask( LoaderManager.LoaderCallbacks asyncTaskLoaderCallbacks ) {
+
         fragment.getLoaderManager().
                 restartLoader( ALL_TASKS_LOADER_ID, null, asyncTaskLoaderCallbacks ).forceLoad();
     }
 
-
+    public void getMessage (String message){
+        EventBus.getDefault().post( new ExceptionMessageEvent(message) );
+    }
 }

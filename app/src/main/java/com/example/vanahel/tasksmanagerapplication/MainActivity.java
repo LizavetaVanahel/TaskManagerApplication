@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity
 
         setSupportActionBar(toolbar);
 
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
         tabLayout.addTab( tabLayout.newTab().setText("All") );
         tabLayout.addTab( tabLayout.newTab().setText("Favorite") );
 
@@ -74,6 +76,12 @@ public class MainActivity extends AppCompatActivity
                 presenter.onNewTaskButtonClicked();
             }
         });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

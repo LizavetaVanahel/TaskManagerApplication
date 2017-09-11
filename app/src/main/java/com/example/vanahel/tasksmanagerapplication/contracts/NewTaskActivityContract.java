@@ -11,6 +11,9 @@ public interface NewTaskActivityContract {
 
         void setTask ( Task task );
 
+        void showExceptionMessage( String message );
+
+
     }
 
     interface Presenter {

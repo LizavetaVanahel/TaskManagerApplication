@@ -22,4 +22,12 @@ public class ListItemMenuContextProvider implements ListItemMenuHandler {
         intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
         activity.startActivityForResult( intent, 0 );
     }
+
+    public void callStartActivityForResultFragment( Activity activity, Task task)  {
+        Intent intent = new Intent( activity, NewTaskActivity.class );
+        intent.putExtra( ExtrasConstants.TASK_EXTRAS, task );
+        intent.putExtra( "screenshot", task );
+        intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+        activity.startActivityForResult( intent, 0 );
+    }
 }

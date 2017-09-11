@@ -9,6 +9,9 @@ import com.example.vanahel.tasksmanagerapplication.R;
 import com.example.vanahel.tasksmanagerapplication.constants.ExtrasConstants;
 import com.example.vanahel.tasksmanagerapplication.contracts.NewTaskActivityContract;
 import com.example.vanahel.tasksmanagerapplication.dao.DAOManager;
+import com.example.vanahel.tasksmanagerapplication.exception.DatabaseLoadException;
+import com.example.vanahel.tasksmanagerapplication.exception.FileLoadException;
+import com.example.vanahel.tasksmanagerapplication.exception.InternetDataLoadException;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
 import java.io.IOException;
@@ -21,6 +24,7 @@ public class NewTaskActivityPresenter implements NewTaskActivityContract.Present
     private Activity activity;
     private EditText title;
     private EditText description;
+    private String message;
 
     public NewTaskActivityPresenter ( Activity activity ){
         this.activity = activity;
@@ -29,7 +33,7 @@ public class NewTaskActivityPresenter implements NewTaskActivityContract.Present
     }
 
     @Override
-    public void onSaveButtonCLicked(Task task) {
+    public void onSaveButtonCLicked(Task task ) {
         String enteredTitle = title.getText().toString();
         String enteredDescription = description.getText().toString();
         Intent intent = new Intent(activity, MainActivity.class);
@@ -37,18 +41,29 @@ public class NewTaskActivityPresenter implements NewTaskActivityContract.Present
             try {
                 DAOManager.getInstance().getTaskDAO().updateTask
                         ( new Task( enteredTitle, enteredDescription, task.getFavorite(), task.getId() ), task );
-            } catch (IOException e) {
-                e.printStackTrace();
+                activity.setResult( RESULT_OK, intent );
+                activity.finish();
+            } catch ( IOException e ) {
+                message = e.getMessage();
+            }  catch ( DatabaseLoadException | FileLoadException | InternetDataLoadException e){
+                message = e.getMessage();
+            } catch ( RuntimeException e ){
+                message = e.getMessage();
             }
-            activity.setResult( RESULT_OK, intent );
-            activity.finish();
+
         } else {
-            boolean isTabFavorite = activity.getIntent().getBooleanExtra(ExtrasConstants.TAB_EXTRAS,
-                    false);
-            DAOManager.getInstance().getTaskDAO().save(new Task(enteredTitle,
-                    enteredDescription, isTabFavorite, UUID.randomUUID().toString()));
-            activity.setResult(RESULT_OK, intent);
-            activity.finish();
+            boolean isTabFavorite = activity.getIntent().
+                    getBooleanExtra( ExtrasConstants.TAB_EXTRAS, false );
+            try {
+                DAOManager.getInstance().getTaskDAO().save(new Task(enteredTitle,
+                        enteredDescription, isTabFavorite, UUID.randomUUID().toString()));
+                activity.setResult(RESULT_OK, intent);
+                activity.finish();
+            } catch ( DatabaseLoadException | FileLoadException | InternetDataLoadException e ){
+                message = e.getMessage();
+            } catch ( RuntimeException e ){
+                message = e.getMessage();
+            }
         }
     }
 
@@ -68,6 +83,10 @@ public class NewTaskActivityPresenter implements NewTaskActivityContract.Present
         title.setSelection(title.getText().length());
         description.setText( task.getDescription() );
         description.setSelection( description.getText().length() );
+    }
+
+    public String sendExceptionMessage (){
+        return message;
     }
 
 }

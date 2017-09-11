@@ -3,6 +3,7 @@ package com.example.vanahel.tasksmanagerapplication.dao;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.vanahel.tasksmanagerapplication.exception.FileLoadException;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
 import java.io.BufferedReader;
@@ -19,6 +20,10 @@ import java.util.List;
 public class InternalStorageDAO implements TaskDAO {
 
     private Context context;
+    private final static String FILE_DOWNLOAD_EXCEPTION =
+            "Failed to download data from Internal Storage";
+    private final static String FILE_SAVE_EXCEPTION =
+            "Failed to save data to Internal Storage";
     private final static String INTERNAL_TASK_FILE_NAME = "Task";
     private final static String COMMA = ",";
     private static final String TAG = "InternalStorageDAO";
@@ -29,6 +34,7 @@ public class InternalStorageDAO implements TaskDAO {
 
     @Override
     public void save(Task task) {
+
         try {
             File file = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
             BufferedWriter writer = new BufferedWriter( new FileWriter(file, true) );
@@ -37,12 +43,13 @@ public class InternalStorageDAO implements TaskDAO {
             writer.write(taskCSVStr);
             writer.newLine();
             writer.close();
-        } catch (IOException e) {
-            Log.e(TAG, "File is not created");
+        } catch ( IOException e ) {
+            throw new FileLoadException( FILE_SAVE_EXCEPTION );
         }
     }
 
     public List<Task> getTasks (){
+
         BufferedReader myReader = null;
         List<Task> taskList = new LinkedList<>();
         String dataRow;
@@ -56,7 +63,7 @@ public class InternalStorageDAO implements TaskDAO {
             }
 
         } catch ( IOException e ) {
-            Log.e(TAG, "File is not created");
+            throw new FileLoadException( FILE_DOWNLOAD_EXCEPTION );
         } finally {
             try {
                 if ( myReader != null ) {
@@ -77,6 +84,7 @@ public class InternalStorageDAO implements TaskDAO {
 
     @Override
     public List<Task> getFavoriteTasks() {
+
         BufferedReader myReader = null;
         List<Task> taskList = new LinkedList<>();
         String dataRow;
@@ -92,14 +100,14 @@ public class InternalStorageDAO implements TaskDAO {
                 }
             }
         } catch ( IOException e ) {
-            Log.e(TAG, "File is not created");
+            throw new FileLoadException( FILE_DOWNLOAD_EXCEPTION );
         } finally {
             try {
                 if ( myReader != null ) {
                     myReader.close();
                 }
             } catch ( IOException e ) {
-                e.printStackTrace();
+                throw new FileLoadException( FILE_DOWNLOAD_EXCEPTION );
             }
         }
         return taskList;
@@ -107,45 +115,56 @@ public class InternalStorageDAO implements TaskDAO {
 
     @Override
     public void delete( Task task ) throws IOException {
-        File taskFile = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
-        FileInputStream fIn = new FileInputStream(taskFile);
-        BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn) );
-        String line;
-        String input = "";
 
-        while ( (line = myReader.readLine()) != null ) {
-            String[] taskString = line.split(COMMA);
-            if ( taskString[3].equals(task.getId()) ){
-                Log.d(TAG, "Line deleted.");
-            } else {
-                input += line + System.lineSeparator();
+        try{
+            File taskFile = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
+            FileInputStream fIn = new FileInputStream(taskFile);
+            BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn) );
+            String line;
+            String input = "";
+
+            while ( ( line = myReader.readLine() ) != null ) {
+                String[] taskString = line.split(COMMA);
+                if ( taskString[3].equals(  task.getId()) ){
+                    Log.d( TAG, "Line deleted." );
+                } else {
+                    input += line + System.lineSeparator();
+                }
             }
+            BufferedWriter writer = new BufferedWriter( new FileWriter( taskFile, false ) );
+            writer.write(input);
+            myReader.close();
+            writer.close();
+        } catch ( RuntimeException e ) {
+            throw new FileLoadException( FILE_DOWNLOAD_EXCEPTION );
         }
-        BufferedWriter writer = new BufferedWriter( new FileWriter(taskFile, false) );
-        writer.write(input);
-        myReader.close();
-        writer.close();
+
     }
 
     @Override
     public void updateTask( Task newTask, Task oldTask ) throws IOException {
-        File taskFile = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
-        FileInputStream fIn = new FileInputStream(taskFile);
-        BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn) );
-        String line;
-        String input = "";
-        String oldTaskString = oldTask.getTitle() + COMMA + oldTask.getDescription()
-                + COMMA + oldTask.getFavoriteAsInt() + COMMA + oldTask.getId();
-        String newTaskString = newTask.getTitle() + COMMA + newTask.getDescription()
-                + COMMA + newTask.getFavoriteAsInt() + COMMA + newTask.getId();
 
-        while ( (line = myReader.readLine()) != null )
-            input += line + System.lineSeparator();
-            input = input.replace(oldTaskString, newTaskString);
+        try {
+            File taskFile = new File( context.getFilesDir(), INTERNAL_TASK_FILE_NAME );
+            FileInputStream fIn = new FileInputStream(taskFile);
+            BufferedReader myReader = new BufferedReader( new InputStreamReader(fIn) );
+            String line;
+            String input = "";
+            String oldTaskString = oldTask.getTitle() + COMMA + oldTask.getDescription()
+                    + COMMA + oldTask.getFavoriteAsInt() + COMMA + oldTask.getId();
+            String newTaskString = newTask.getTitle() + COMMA + newTask.getDescription()
+                    + COMMA + newTask.getFavoriteAsInt() + COMMA + newTask.getId();
 
-        BufferedWriter writer = new BufferedWriter( new FileWriter(taskFile, false) );
-        writer.write(input);
-        myReader.close();
-        writer.close();
+            while ( ( line = myReader.readLine() ) != null )
+                input += line + System.lineSeparator();
+            input = input.replace( oldTaskString, newTaskString );
+
+            BufferedWriter writer = new BufferedWriter( new FileWriter( taskFile, false ) );
+            writer.write(input);
+            myReader.close();
+            writer.close();
+        } catch ( RuntimeException e ) {
+            throw new FileLoadException( FILE_SAVE_EXCEPTION );
+        }
     }
 }

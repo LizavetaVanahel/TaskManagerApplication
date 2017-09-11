@@ -1,4 +1,4 @@
-package com.example.vanahel.tasksmanagerapplication;
+package com.example.vanahel.tasksmanagerapplication.services.firebase;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.example.vanahel.tasksmanagerapplication.NewTaskActivity;
+import com.example.vanahel.tasksmanagerapplication.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -23,7 +25,7 @@ public class TasksFireBaseMessagingService extends FirebaseMessagingService {
 
 
     @Override
-        public void onMessageReceived(RemoteMessage remoteMessage) {
+        public void onMessageReceived( RemoteMessage remoteMessage ) {
 
             String notificationTitle = null, notificationBody = null;
 
