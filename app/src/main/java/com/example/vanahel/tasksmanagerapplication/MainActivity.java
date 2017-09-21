@@ -20,11 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
- implements TabLayout.OnTabSelectedListener,
-        MainActivityContract.View{
+        implements TabLayout.OnTabSelectedListener,
+        MainActivityContract.View {
 
-    private MainActivityPresenter presenter;
-    private ViewPagerAdapter viewPagerAdapter;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.new_task_button)
@@ -37,36 +35,38 @@ public class MainActivity extends AppCompatActivity
     ViewPager viewPager;
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
+    private MainActivityPresenter presenter;
+    private ViewPagerAdapter viewPagerAdapter;
 
     @Override
-    protected void onCreate( final Bundle savedInstanceState ) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        tabLayout.addTab( tabLayout.newTab().setText("All") );
-        tabLayout.addTab( tabLayout.newTab().setText("Favorite") );
+        tabLayout.addTab(tabLayout.newTab().setText("All"));
+        tabLayout.addTab(tabLayout.newTab().setText("Favorite"));
 
         viewPagerAdapter =
-                new ViewPagerAdapter( getSupportFragmentManager() );
+                new ViewPagerAdapter(getSupportFragmentManager());
 
-        viewPager.setAdapter( viewPagerAdapter );
+        viewPager.setAdapter(viewPagerAdapter);
 
         tabLayout.setOnTabSelectedListener(this);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle( this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close );
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        SideMenuNavigation sideMenuNavigation = new SideMenuNavigation( this, drawer );
+        SideMenuNavigation sideMenuNavigation = new SideMenuNavigation(this, drawer);
 
-        navigationView.setNavigationItemSelectedListener( sideMenuNavigation );
+        navigationView.setNavigationItemSelectedListener(sideMenuNavigation);
 
-        viewPager.addOnPageChangeListener( new TabLayout.TabLayoutOnPageChangeListener( tabLayout ) );
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
-        presenter = new MainActivityPresenter( this, viewPager );
+        presenter = new MainActivityPresenter(this, viewPager);
         createNewTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,28 +82,28 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTabSelected( TabLayout.Tab tab ) {
-        viewPager.setCurrentItem( tab.getPosition() );
-        if (viewPagerAdapter.getCurrentFragment() != null ) {
+    public void onTabSelected(TabLayout.Tab tab) {
+        viewPager.setCurrentItem(tab.getPosition());
+        if (viewPagerAdapter.getCurrentFragment() != null) {
             viewPagerAdapter.getCurrentFragment().onResume();
         }
 
     }
 
     @Override
-    public void onTabUnselected( TabLayout.Tab tab ) {
+    public void onTabUnselected(TabLayout.Tab tab) {
 
     }
 
     @Override
-    public void onTabReselected( TabLayout.Tab tab ) {
+    public void onTabReselected(TabLayout.Tab tab) {
 
     }
 
     @Override
-    protected void onActivityResult( int requestCode, int resultCode, Intent data ) {
-        super.onActivityResult( requestCode, resultCode, data );
-        if ( resultCode == RESULT_OK ) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
             if (viewPagerAdapter.getCurrentFragment() != null) {
                 viewPagerAdapter.getCurrentFragment().onResume();
             }

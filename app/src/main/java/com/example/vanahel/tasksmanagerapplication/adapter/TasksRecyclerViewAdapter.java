@@ -20,26 +20,13 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
     private String[] dataset;
 
-    public static class TasksViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.card_view)
-        CardView cardView;
-        @BindView(R.id.title_item)
-        TextView title;
-        @BindView(R.id.description_item)
-        TextView description;
-        public TasksViewHolder (View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
-    public TasksRecyclerViewAdapter (String[]dataset) {
+    public TasksRecyclerViewAdapter(String[] dataset) {
         dataset = dataset;
     }
 
     @Override
     public TasksRecyclerViewAdapter.TasksViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
+                                                                       int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tasks_card, parent, false);
         TasksViewHolder tasksViewHolder = new TasksViewHolder(v);
         return tasksViewHolder;
@@ -47,12 +34,12 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
     @Override
     public void onBindViewHolder(TasksViewHolder holder, final int position) {
-        holder.title.setText(dataset [position]);
-        holder.description.setText(dataset [position]);
+        holder.title.setText(dataset[position]);
+        holder.description.setText(dataset[position]);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String currentValue = dataset [position];
+                String currentValue = dataset[position];
             }
         });
     }
@@ -60,5 +47,19 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
     @Override
     public int getItemCount() {
         return dataset.length;
+    }
+
+    public static class TasksViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.card_view)
+        CardView cardView;
+        @BindView(R.id.title_item)
+        TextView title;
+        @BindView(R.id.description_item)
+        TextView description;
+
+        public TasksViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
     }
 }

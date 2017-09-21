@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.vanahel.tasksmanagerapplication.SettingsActivity">
 
-    <include layout="@layout/abc_screen_content_include"/>
+    <include layout="@layout/abc_screen_content_include" />
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

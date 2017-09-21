@@ -11,23 +11,23 @@ import com.example.vanahel.tasksmanagerapplication.task.Task;
 public class ListItemMenuContextProvider implements ListItemMenuHandler {
 
     @Override
-    public void callFragmentOnResume( Fragment fragment ) {
+    public void callFragmentOnResume(Fragment fragment) {
         fragment.onResume();
     }
 
     @Override
-    public void callStartActivityForResult( Activity activity, Task task)  {
-        Intent intent = new Intent( activity, NewTaskActivity.class );
-        intent.putExtra( ExtrasConstants.TASK_EXTRAS, task );
-        intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
-        activity.startActivityForResult( intent, 0 );
+    public void callStartActivityForResult(Activity activity, Task task) {
+        Intent intent = new Intent(activity, NewTaskActivity.class);
+        intent.putExtra(ExtrasConstants.TASK_EXTRAS, task);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivityForResult(intent, 0);
     }
 
-    public void callStartActivityForResultFragment( Activity activity, Task task)  {
-        Intent intent = new Intent( activity, NewTaskActivity.class );
-        intent.putExtra( ExtrasConstants.TASK_EXTRAS, task );
-        intent.putExtra( "screenshot", task );
-        intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
-        activity.startActivityForResult( intent, 0 );
+    public void callStartActivityForResultFragment(Activity activity, Task task) {
+        Intent intent = new Intent(activity, NewTaskActivity.class);
+        intent.putExtra(ExtrasConstants.TASK_EXTRAS, task);
+        intent.putExtra("screenshot", task);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivityForResult(intent, 0);
     }
 }

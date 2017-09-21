@@ -25,31 +25,31 @@ public class TasksArrayAdapter extends BaseAdapter implements TaskArrayAdapterCo
     private TaskArrayAdapterPresenter presenter;
     private Fragment fragment;
 
-    public TasksArrayAdapter ( Activity activity, Fragment fragment ){
+    public TasksArrayAdapter(Activity activity, Fragment fragment) {
         this.activity = activity;
-        layoutInflater = LayoutInflater.from( activity );
+        layoutInflater = LayoutInflater.from(activity);
         this.fragment = fragment;
     }
 
 
     @Override
-    public View getView( final int position, View convertView, final ViewGroup parent ) {
-        if ( convertView == null ) {
-            convertView = layoutInflater.inflate( R.layout.listview_item, parent, false );
+    public View getView(final int position, View convertView, final ViewGroup parent) {
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.listview_item, parent, false);
         }
-        final Task task = (Task)getItem( position );
+        final Task task = (Task) getItem(position);
         final TextView title = (TextView) convertView.findViewById(R.id.title_item);
         final TextView description = (TextView) convertView.findViewById(R.id.description_item);
         final Button menuButton = (Button) convertView.findViewById(R.id.list_item_menu_button);
 
-        title.setText( task.getTitle() );
-        description.setText( task.getDescription() );
+        title.setText(task.getTitle());
+        description.setText(task.getDescription());
 
-        presenter = new TaskArrayAdapterPresenter( activity, task, fragment );
+        presenter = new TaskArrayAdapterPresenter(activity, task, fragment);
 
-        menuButton.setOnClickListener( new View.OnClickListener() {
+        menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick( View view ) {
+            public void onClick(View view) {
                 presenter.onMenuButtonClicked(view);
             }
         });
@@ -63,17 +63,17 @@ public class TasksArrayAdapter extends BaseAdapter implements TaskArrayAdapterCo
     }
 
     @Override
-    public Object getItem( int position ) {
-        return tasks.get( position );
+    public Object getItem(int position) {
+        return tasks.get(position);
     }
 
     @Override
-    public long getItemId( int position ) {
-        Task task = ( Task )getItem( position );
-       return position;
+    public long getItemId(int position) {
+        Task task = (Task) getItem(position);
+        return position;
     }
 
-    public void setTask ( List<Task> data ){
+    public void setTask(List<Task> data) {
         tasks.clear();
         tasks.addAll(data);
         notifyDataSetChanged();

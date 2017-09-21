@@ -13,7 +13,7 @@ class SideMenuNavigation implements NavigationView.OnNavigationItemSelectedListe
     private Activity activity;
     private DrawerLayout drawer;
 
-    SideMenuNavigation (Activity activity, DrawerLayout drawer){
+    SideMenuNavigation(Activity activity, DrawerLayout drawer) {
         this.activity = activity;
         this.drawer = drawer;
     }
@@ -22,13 +22,13 @@ class SideMenuNavigation implements NavigationView.OnNavigationItemSelectedListe
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_task) {
-            Intent intent = new Intent( activity, MainActivity.class );
-            intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
-            activity.startActivityForResult( intent, 0 );
+            Intent intent = new Intent(activity, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            activity.startActivityForResult(intent, 0);
         } else if (id == R.id.nav_settings) {
-            Intent intent = new Intent( activity, SettingsActivity.class );
-            intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
-            activity.startActivityForResult( intent, 0 );
+            Intent intent = new Intent(activity, SettingsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            activity.startActivityForResult(intent, 0);
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -15,16 +15,16 @@ import com.example.vanahel.tasksmanagerapplication.task.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavoriteAsyncTasksLoaderCallbacks implements LoaderManager.LoaderCallbacks< AsyncTaskResult< List<Task> > > {
+public class FavoriteAsyncTasksLoaderCallbacks implements LoaderManager.LoaderCallbacks<AsyncTaskResult<List<Task>>> {
 
     private Activity activity;
     private TaskDAO taskDAO;
     private TasksArrayAdapter favoriteTasksArrayAdapter;
     private TabFragmentPresenter tabFragmentPresenter;
 
-    public FavoriteAsyncTasksLoaderCallbacks ( Activity activity, TaskDAO taskDAO,
-                                              TasksArrayAdapter favoriteTasksArrayAdapter,
-                                               TabFragmentPresenter tabFragmentPresenter ){
+    public FavoriteAsyncTasksLoaderCallbacks(Activity activity, TaskDAO taskDAO,
+                                             TasksArrayAdapter favoriteTasksArrayAdapter,
+                                             TabFragmentPresenter tabFragmentPresenter) {
         this.activity = activity;
         this.taskDAO = taskDAO;
         this.favoriteTasksArrayAdapter = favoriteTasksArrayAdapter;
@@ -32,22 +32,22 @@ public class FavoriteAsyncTasksLoaderCallbacks implements LoaderManager.LoaderCa
     }
 
     @Override
-    public Loader<AsyncTaskResult< List<Task> >> onCreateLoader( int i, Bundle bundle ) {
-        return new FavoriteAsyncTaskLoader( activity, taskDAO );
+    public Loader<AsyncTaskResult<List<Task>>> onCreateLoader(int i, Bundle bundle) {
+        return new FavoriteAsyncTaskLoader(activity, taskDAO);
     }
 
     @Override
-    public void onLoadFinished( Loader< AsyncTaskResult< List<Task> > > loader,
-                                AsyncTaskResult< List<Task> > wrapper ) {
-        if ( wrapper.getError() == null ){
-            favoriteTasksArrayAdapter.setTask( wrapper.getResult() );
+    public void onLoadFinished(Loader<AsyncTaskResult<List<Task>>> loader,
+                               AsyncTaskResult<List<Task>> wrapper) {
+        if (wrapper.getError() == null) {
+            favoriteTasksArrayAdapter.setTask(wrapper.getResult());
         } else {
-            tabFragmentPresenter.getMessage( wrapper.getError().getMessage() );
+            tabFragmentPresenter.getMessage(wrapper.getError().getMessage());
         }
     }
 
     @Override
-    public void onLoaderReset( Loader< AsyncTaskResult< List<Task> > > loader ) {
-        favoriteTasksArrayAdapter.setTask( new ArrayList<Task>() );
+    public void onLoaderReset(Loader<AsyncTaskResult<List<Task>>> loader) {
+        favoriteTasksArrayAdapter.setTask(new ArrayList<Task>());
     }
 }

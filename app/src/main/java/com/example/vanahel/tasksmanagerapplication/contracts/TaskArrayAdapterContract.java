@@ -6,7 +6,7 @@ public interface TaskArrayAdapterContract {
     }
 
     interface Presenter {
-        void onMenuButtonClicked( android.view.View view );
+        void onMenuButtonClicked(android.view.View view);
     }
 
     interface Menu {

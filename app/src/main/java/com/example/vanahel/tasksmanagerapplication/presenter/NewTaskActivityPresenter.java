@@ -26,42 +26,42 @@ public class NewTaskActivityPresenter implements NewTaskActivityContract.Present
     private EditText description;
     private String message;
 
-    public NewTaskActivityPresenter ( Activity activity ){
+    public NewTaskActivityPresenter(Activity activity) {
         this.activity = activity;
         title = (EditText) activity.findViewById(R.id.title_et);
         description = (EditText) activity.findViewById(R.id.description_et);
     }
 
     @Override
-    public void onSaveButtonCLicked(Task task ) {
+    public void onSaveButtonCLicked(Task task) {
         String enteredTitle = title.getText().toString();
         String enteredDescription = description.getText().toString();
         Intent intent = new Intent(activity, MainActivity.class);
-        if ( activity.getIntent().hasExtra( ExtrasConstants.TASK_EXTRAS ) ) {
+        if (activity.getIntent().hasExtra(ExtrasConstants.TASK_EXTRAS)) {
             try {
                 DAOManager.getInstance().getTaskDAO().updateTask
-                        ( new Task( enteredTitle, enteredDescription, task.getFavorite(), task.getId() ), task );
-                activity.setResult( RESULT_OK, intent );
+                        (new Task(enteredTitle, enteredDescription, task.getFavorite(), task.getId()), task);
+                activity.setResult(RESULT_OK, intent);
                 activity.finish();
-            } catch ( IOException e ) {
+            } catch (IOException e) {
                 message = e.getMessage();
-            }  catch ( DatabaseLoadException | FileLoadException | InternetDataLoadException e){
+            } catch (DatabaseLoadException | FileLoadException | InternetDataLoadException e) {
                 message = e.getMessage();
-            } catch ( RuntimeException e ){
+            } catch (RuntimeException e) {
                 message = e.getMessage();
             }
 
         } else {
             boolean isTabFavorite = activity.getIntent().
-                    getBooleanExtra( ExtrasConstants.TAB_EXTRAS, false );
+                    getBooleanExtra(ExtrasConstants.TAB_EXTRAS, false);
             try {
                 DAOManager.getInstance().getTaskDAO().save(new Task(enteredTitle,
                         enteredDescription, isTabFavorite, UUID.randomUUID().toString()));
                 activity.setResult(RESULT_OK, intent);
                 activity.finish();
-            } catch ( DatabaseLoadException | FileLoadException | InternetDataLoadException e ){
+            } catch (DatabaseLoadException | FileLoadException | InternetDataLoadException e) {
                 message = e.getMessage();
-            } catch ( RuntimeException e ){
+            } catch (RuntimeException e) {
                 message = e.getMessage();
             }
         }
@@ -74,18 +74,18 @@ public class NewTaskActivityPresenter implements NewTaskActivityContract.Present
         String savedDescription = task.getDescription();
         Boolean savedIsFavorite = task.getFavorite();
         String savedId = task.getId();
-        return new Task ( savedTitle, savedDescription, savedIsFavorite, savedId );
+        return new Task(savedTitle, savedDescription, savedIsFavorite, savedId);
     }
 
     @Override
     public void setTask(Task task) {
-        title.setText( task.getTitle() );
+        title.setText(task.getTitle());
         title.setSelection(title.getText().length());
-        description.setText( task.getDescription() );
-        description.setSelection( description.getText().length() );
+        description.setText(task.getDescription());
+        description.setSelection(description.getText().length());
     }
 
-    public String sendExceptionMessage (){
+    public String sendExceptionMessage() {
         return message;
     }
 

@@ -25,10 +25,6 @@ import butterknife.ButterKnife;
 
 public class NewTaskActivity extends AppCompatActivity implements NewTaskActivityContract.View {
 
-    private Task task;
-    private NewTaskActivityPresenter presenter;
-    private ScreenshotProvider screenshotProvider;
-
     @BindView(R.id.save_button)
     Button saveButton;
     @BindView(R.id.title_et)
@@ -37,7 +33,20 @@ public class NewTaskActivity extends AppCompatActivity implements NewTaskActivit
     EditText description;
     @BindView(R.id.coordinator)
     CoordinatorLayout coordinatorLayout;
-
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String titleContent = intent.getStringExtra("title");
+            String descriptionContent = intent.getStringExtra("description");
+            title.setText(titleContent);
+            title.setSelection(title.getText().length());
+            description.setText(descriptionContent);
+            description.setSelection(description.getText().length());
+        }
+    };
+    private Task task;
+    private NewTaskActivityPresenter presenter;
+    private ScreenshotProvider screenshotProvider;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -53,7 +62,7 @@ public class NewTaskActivity extends AppCompatActivity implements NewTaskActivit
             task = getTask();
             setTask(task);
         } catch (Exception e) {
-            Log.d( "Empty field", "The fields are empty" );
+            Log.d("Empty field", "The fields are empty");
 
         }
 
@@ -64,33 +73,21 @@ public class NewTaskActivity extends AppCompatActivity implements NewTaskActivit
                 String message = presenter.sendExceptionMessage();
                 showExceptionMessage(message);
 
-                }
+            }
         });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-            if ( getIntent().hasExtra("brodcastreceiver") ) {
-            LocalBroadcastManager.getInstance(this).registerReceiver( broadcastReceiver,
-                    new IntentFilter( TasksFireBaseMessagingService.INTENT_FILTER) );
-            broadcastReceiver.onReceive( this, getIntent() );
-        } else if ( getIntent().hasExtra("screenshot") ){
-                screenshotProvider.takeScreenshotShare();
-            }
-    }
-
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String titleContent = intent.getStringExtra("title");
-            String descriptionContent = intent.getStringExtra("description");
-            title.setText(titleContent);
-            title.setSelection( title.getText().length() );
-            description.setText( descriptionContent );
-            description.setSelection( description.getText().length() );
+        if (getIntent().hasExtra("brodcastreceiver")) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+                    new IntentFilter(TasksFireBaseMessagingService.INTENT_FILTER));
+            broadcastReceiver.onReceive(this, getIntent());
+        } else if (getIntent().hasExtra("screenshot")) {
+            screenshotProvider.takeScreenshotShare();
         }
-    };
+    }
 
     @Override
     public Task getTask() {
@@ -103,8 +100,8 @@ public class NewTaskActivity extends AppCompatActivity implements NewTaskActivit
     }
 
     @Override
-    public void showExceptionMessage( String message ) {
-        Snackbar snackbar = Snackbar.make( coordinatorLayout, message, Snackbar.LENGTH_SHORT );
+    public void showExceptionMessage(String message) {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT);
         snackbar.show();
     }
 }

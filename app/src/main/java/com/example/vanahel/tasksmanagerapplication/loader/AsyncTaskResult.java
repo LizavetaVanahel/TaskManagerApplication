@@ -9,7 +9,7 @@ public class AsyncTaskResult<T> {
         return result;
     }
 
-    void setResult( T result ) {
+    void setResult(T result) {
         this.result = result;
     }
 
@@ -17,7 +17,7 @@ public class AsyncTaskResult<T> {
         return error;
     }
 
-    void setError( RuntimeException error ) {
+    void setError(RuntimeException error) {
         this.error = error;
     }
 

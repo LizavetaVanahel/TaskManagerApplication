@@ -16,28 +16,28 @@ public class InternetDAO implements TaskDAO {
     private static final String READ_FAILED_TAG = "Database read failed";
     private static final String FIREBASE_DATABASE_URL =
             "https://tasksmanagerapplication.firebaseio.com/";
-    private Firebase ref = new Firebase( FIREBASE_DATABASE_URL );
-    private List <Task> tasksList;
+    private Firebase ref = new Firebase(FIREBASE_DATABASE_URL);
+    private List<Task> tasksList;
     private Task task;
-    private List <Task> currentTasksList;
+    private List<Task> currentTasksList;
 
-    public InternetDAO (){
+    public InternetDAO() {
         tasksList = new ArrayList<>();
         currentTasksList = new ArrayList<>();
-        ref.child("tasks").addValueEventListener( new ValueEventListener() {
+        ref.child("tasks").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange( DataSnapshot dataSnapshot ) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 currentTasksList.clear();
-                for ( DataSnapshot postSnapshot : dataSnapshot.getChildren() ) {
-                    task = postSnapshot.getValue( Task.class );
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    task = postSnapshot.getValue(Task.class);
                     currentTasksList.add(task);
                 }
                 tasksList.clear();
-                tasksList.addAll( currentTasksList );
+                tasksList.addAll(currentTasksList);
             }
 
             @Override
-            public void onCancelled( FirebaseError firebaseError ) {
+            public void onCancelled(FirebaseError firebaseError) {
                 throw new InternetDataLoadException(firebaseError.getMessage());
             }
         });
@@ -57,23 +57,23 @@ public class InternetDAO implements TaskDAO {
     @Override
     public List<Task> getFavoriteTasks() {
         final List<Task> favoriteTasksList = new ArrayList<>();
-        for ( Task currentTask : tasksList ) {
-            if ( currentTask.getFavorite() ){
-                favoriteTasksList.add( currentTask );
+        for (Task currentTask : tasksList) {
+            if (currentTask.getFavorite()) {
+                favoriteTasksList.add(currentTask);
             }
         }
         return favoriteTasksList;
     }
 
     @Override
-    public void delete( Task task ) throws IOException {
-        ref.child("tasks").child( task.getId() ).removeValue();
+    public void delete(Task task) throws IOException {
+        ref.child("tasks").child(task.getId()).removeValue();
     }
 
     @Override
-    public void updateTask( Task newTask, Task oldTask ) throws IOException {
+    public void updateTask(Task newTask, Task oldTask) throws IOException {
 
-        ref.child("tasks").child( oldTask.getId() ).setValue(newTask);
+        ref.child("tasks").child(oldTask.getId()).setValue(newTask);
     }
 
 }

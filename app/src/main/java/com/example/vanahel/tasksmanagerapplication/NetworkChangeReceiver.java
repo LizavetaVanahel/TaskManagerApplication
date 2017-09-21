@@ -13,11 +13,11 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         ConnectivityManager connectivityManager =
-                (ConnectivityManager)context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        if (!wifi.isConnected()){
+        if (!wifi.isConnected()) {
             Toast.makeText(context, "Please connect to the Internet",
                     Toast.LENGTH_LONG).show();
         }

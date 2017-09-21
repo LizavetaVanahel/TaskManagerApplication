@@ -7,8 +7,8 @@ import com.example.vanahel.tasksmanagerapplication.task.Task;
 
 public interface ListItemMenuHandler {
 
-    void callFragmentOnResume ( Fragment fragment );
+    void callFragmentOnResume(Fragment fragment);
 
-    void callStartActivityForResult ( Activity activity, Task task );
+    void callStartActivityForResult(Activity activity, Task task);
 
 }

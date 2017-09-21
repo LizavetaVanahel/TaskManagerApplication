@@ -20,11 +20,14 @@ import butterknife.ButterKnife;
 public class SettingsActivity extends PreferenceActivity implements
         SettingsActivityContract.View {
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
     private TaskDAO taskDAO;
     private SettingsActivityPresenter presenter;
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
-    @BindView(R.id.nav_view) NavigationView navigationView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,17 +44,17 @@ public class SettingsActivity extends PreferenceActivity implements
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        SideMenuNavigation sideMenuNavigation = new SideMenuNavigation( this, drawer );
+        SideMenuNavigation sideMenuNavigation = new SideMenuNavigation(this, drawer);
 
-        navigationView.setNavigationItemSelectedListener( sideMenuNavigation );
+        navigationView.setNavigationItemSelectedListener(sideMenuNavigation);
 
         presenter = new SettingsActivityPresenter(this);
         listPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object object) {
-                presenter.onTaskSettingsChanged( object, taskDAO );
+                presenter.onTaskSettingsChanged(object, taskDAO);
                 return true;
-               }
+            }
         });
     }
 }

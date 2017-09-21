@@ -11,14 +11,14 @@ import java.io.FileOutputStream;
 
 class ScreenshotUtil {
 
-    static Bitmap getScreenShot( View view ) {
+    static Bitmap getScreenShot(View view) {
         View rootView = view.getRootView();
         view.setDrawingCacheEnabled(true);
-        view.measure( View.MeasureSpec.makeMeasureSpec( 0, View.MeasureSpec.UNSPECIFIED ),
-                View.MeasureSpec.makeMeasureSpec( 0, View.MeasureSpec.UNSPECIFIED ) );
-        view.layout( 0,0,view.getMeasuredWidth(), view.getMeasuredHeight() );
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
         view.buildDrawingCache(true);
-        Bitmap bitmap = Bitmap.createBitmap( view.getDrawingCache() );
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
         rootView.setDrawingCacheEnabled(false);
         return bitmap;
     }
@@ -26,23 +26,23 @@ class ScreenshotUtil {
 
     static File getMainDirectoryName(Context context) {
         File mainDirectory = new File(
-                context.getExternalFilesDir( Environment.DIRECTORY_PICTURES), "Task" );
-        if ( !mainDirectory.exists() ) {
-            if ( mainDirectory.mkdir() )
-                Log.e( "Create Directory", "Main Directory Created : " + mainDirectory );
+                context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Task");
+        if (!mainDirectory.exists()) {
+            if (mainDirectory.mkdir())
+                Log.e("Create Directory", "Main Directory Created : " + mainDirectory);
         }
         return mainDirectory;
     }
 
-    static File store( Bitmap bm, String fileName, File saveFilePath ) {
-        File directory = new File( saveFilePath.getAbsolutePath() );
-        if ( !directory.exists() ){
+    static File store(Bitmap bm, String fileName, File saveFilePath) {
+        File directory = new File(saveFilePath.getAbsolutePath());
+        if (!directory.exists()) {
             directory.mkdirs();
         }
-        File file = new File( saveFilePath.getAbsolutePath(), fileName );
+        File file = new File(saveFilePath.getAbsolutePath(), fileName);
         try {
             FileOutputStream fOut = new FileOutputStream(file);
-            bm.compress( Bitmap.CompressFormat.JPEG, 85, fOut );
+            bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
             fOut.flush();
             fOut.close();
         } catch (Exception e) {

@@ -15,16 +15,16 @@ import com.example.vanahel.tasksmanagerapplication.task.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AsyncTaskLoaderCallbacks implements LoaderManager.LoaderCallbacks< AsyncTaskResult< List<Task> > > {
+public class AsyncTaskLoaderCallbacks implements LoaderManager.LoaderCallbacks<AsyncTaskResult<List<Task>>> {
 
     private Activity activity;
     private TaskDAO taskDAO;
     private TasksArrayAdapter tasksArrayAdapter;
     private TabFragmentPresenter tabFragmentPresenter;
 
-    public AsyncTaskLoaderCallbacks ( Activity activity, TaskDAO taskDAO,
-                                     TasksArrayAdapter tasksArrayAdapter,
-                                     TabFragmentPresenter tabFragmentPresenter ){
+    public AsyncTaskLoaderCallbacks(Activity activity, TaskDAO taskDAO,
+                                    TasksArrayAdapter tasksArrayAdapter,
+                                    TabFragmentPresenter tabFragmentPresenter) {
         this.activity = activity;
         this.taskDAO = taskDAO;
         this.tasksArrayAdapter = tasksArrayAdapter;
@@ -33,25 +33,24 @@ public class AsyncTaskLoaderCallbacks implements LoaderManager.LoaderCallbacks< 
 
 
     @Override
-    public Loader<AsyncTaskResult< List<Task> >> onCreateLoader( int i, Bundle bundle ) {
-        return new TasksAsyncTaskLoader( activity, taskDAO );
+    public Loader<AsyncTaskResult<List<Task>>> onCreateLoader(int i, Bundle bundle) {
+        return new TasksAsyncTaskLoader(activity, taskDAO);
     }
 
     @Override
-    public void onLoadFinished( Loader< AsyncTaskResult< List<Task> > > loader,
-                                AsyncTaskResult< List<Task> > wrapper ) {
-        if ( wrapper.getError() == null ){
-            tasksArrayAdapter.setTask( wrapper.getResult() );
+    public void onLoadFinished(Loader<AsyncTaskResult<List<Task>>> loader,
+                               AsyncTaskResult<List<Task>> wrapper) {
+        if (wrapper.getError() == null) {
+            tasksArrayAdapter.setTask(wrapper.getResult());
         } else {
-            tabFragmentPresenter.getMessage( wrapper.getError().getMessage() );
+            tabFragmentPresenter.getMessage(wrapper.getError().getMessage());
         }
     }
 
     @Override
-    public void onLoaderReset( Loader< AsyncTaskResult< List<Task> > > loader ) {
-        tasksArrayAdapter.setTask( new ArrayList<Task>() );
+    public void onLoaderReset(Loader<AsyncTaskResult<List<Task>>> loader) {
+        tasksArrayAdapter.setTask(new ArrayList<Task>());
     }
-
 
 
 }

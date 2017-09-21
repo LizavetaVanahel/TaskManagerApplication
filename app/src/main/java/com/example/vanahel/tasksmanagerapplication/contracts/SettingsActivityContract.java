@@ -10,6 +10,6 @@ public interface SettingsActivityContract {
 
     interface Presenter {
 
-        void onTaskSettingsChanged( Object object, TaskDAO taskDAO );
+        void onTaskSettingsChanged(Object object, TaskDAO taskDAO);
     }
 }

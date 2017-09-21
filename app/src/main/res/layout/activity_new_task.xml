@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinator"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <include
         android:id="@+id/tool_bar"
         layout="@layout/toolbar_new_task_activity"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
-    </include>
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"></include>
 
     <EditText
         android:id="@+id/title_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="17"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:hint="@string/title"
-        android:layout_marginTop="96dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:ems="17"
+        android:gravity="center"
+        android:hint="@string/title" />
 
     <EditText
         android:id="@+id/description_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:ems="17"
-        android:hint="@string/description"
+        android:layout_alignStart="@+id/title_et"
         android:layout_below="@+id/title_et"
-        android:layout_alignStart="@+id/title_et" />
+        android:layout_gravity="center"
+        android:layout_marginTop="96dp"
+        android:ems="17"
+        android:hint="@string/description" />
 </android.support.design.widget.CoordinatorLayout>

@@ -4,7 +4,7 @@ public class ExceptionMessageEvent {
 
     private final String message;
 
-    public ExceptionMessageEvent( String message ) {
+    public ExceptionMessageEvent(String message) {
         this.message = message;
     }
 

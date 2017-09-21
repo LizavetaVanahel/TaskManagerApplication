@@ -30,40 +30,40 @@ public class DatabaseDAO implements TaskDAO {
                     COLUMN_ID + " STRING PRIMARY KEY, " +
                     COLUMN_TITLE + " TEXT, " +
                     COLUMN_DESCRIPTION + " TEXT, " +
-                    COLUMN_IS_FAVORITE +  " INTEGER);";
+                    COLUMN_IS_FAVORITE + " INTEGER);";
 
     private Context context;
     private DBHelper dbHelper;
     private SQLiteDatabase database;
 
-    public DatabaseDAO( Context context ) {
+    public DatabaseDAO(Context context) {
         this.context = context;
         open();
     }
 
     private void open() {
-        this.dbHelper = new DBHelper( context, DB_NAME, null, DB_VERSION );
+        this.dbHelper = new DBHelper(context, DB_NAME, null, DB_VERSION);
         this.database = dbHelper.getWritableDatabase();
     }
 
     private void close() {
-        if ( dbHelper !=null ) dbHelper.close();
+        if (dbHelper != null) dbHelper.close();
     }
 
     @Override
-    public void updateTask ( Task newTask, Task oldTask ) {
+    public void updateTask(Task newTask, Task oldTask) {
         ContentValues cv = new ContentValues();
-        try{
-            cv.put( COLUMN_TITLE, newTask.getTitle() );
-            cv.put( COLUMN_DESCRIPTION, newTask.getDescription() );
-            cv.put( COLUMN_IS_FAVORITE, newTask.getFavoriteAsInt() );
-            cv.put( COLUMN_ID, newTask.getId() );
+        try {
+            cv.put(COLUMN_TITLE, newTask.getTitle());
+            cv.put(COLUMN_DESCRIPTION, newTask.getDescription());
+            cv.put(COLUMN_IS_FAVORITE, newTask.getFavoriteAsInt());
+            cv.put(COLUMN_ID, newTask.getId());
 
-            int affectedRows = database.update( DB_TABLE, cv, COLUMN_ID + "=?",
-                    new String[] {oldTask.getId()} );
-            System.out.print( "SQL update method. Rows affected: " + affectedRows );
-        } catch ( RuntimeException exception ){
-            throw new DatabaseLoadException( DB_SAVE_EXCEPTION );
+            int affectedRows = database.update(DB_TABLE, cv, COLUMN_ID + "=?",
+                    new String[]{oldTask.getId()});
+            System.out.print("SQL update method. Rows affected: " + affectedRows);
+        } catch (RuntimeException exception) {
+            throw new DatabaseLoadException(DB_SAVE_EXCEPTION);
         }
     }
 
@@ -71,22 +71,22 @@ public class DatabaseDAO implements TaskDAO {
     public void save(Task task) {
 //        throw new DatabaseLoadException("OLOLOLO....we have some problems!");
         ContentValues cv = new ContentValues();
-        try{
-            cv.put( COLUMN_TITLE, task.getTitle() );
-            cv.put( COLUMN_DESCRIPTION, task.getDescription() );
-            cv.put( COLUMN_IS_FAVORITE, task.getFavoriteAsInt() );
-            cv.put( COLUMN_ID, task.getId() );
+        try {
+            cv.put(COLUMN_TITLE, task.getTitle());
+            cv.put(COLUMN_DESCRIPTION, task.getDescription());
+            cv.put(COLUMN_IS_FAVORITE, task.getFavoriteAsInt());
+            cv.put(COLUMN_ID, task.getId());
             database.insert(DB_TABLE, null, cv);
-        } catch ( RuntimeException exception ){
+        } catch (RuntimeException exception) {
             throw new DatabaseLoadException(DB_SAVE_EXCEPTION);
         }
     }
 
     @Override
-    public List<Task> getFavoriteTasks () {
+    public List<Task> getFavoriteTasks() {
         List tasks = new LinkedList();
-        try ( Cursor cursor = database.rawQuery("SELECT * FROM " + DB_TABLE + " WHERE "
-                + COLUMN_IS_FAVORITE + "=?", new String[]{"1"}) ){
+        try (Cursor cursor = database.rawQuery("SELECT * FROM " + DB_TABLE + " WHERE "
+                + COLUMN_IS_FAVORITE + "=?", new String[]{"1"})) {
             while (cursor.moveToNext()) {
                 int titleIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_TITLE);
                 int descriptionIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_DESCRIPTION);
@@ -98,8 +98,8 @@ public class DatabaseDAO implements TaskDAO {
                 String id = cursor.getString(idIndex);
                 tasks.add(new Task(title, description, isFavorite, id));
             }
-        } catch ( RuntimeException exception ){
-            throw new DatabaseLoadException( DB_DOWNLOAD_EXCEPTION );
+        } catch (RuntimeException exception) {
+            throw new DatabaseLoadException(DB_DOWNLOAD_EXCEPTION);
         }
 
         return tasks;
@@ -109,39 +109,39 @@ public class DatabaseDAO implements TaskDAO {
     public List<Task> getTasks() {
 //        throw new DatabaseLoadException("OLOLOLO....we have some problems!");
         List tasks = new LinkedList();
-        try{
-            Cursor cursor = database.query( DB_TABLE, null, null, null, null, null, null );
+        try {
+            Cursor cursor = database.query(DB_TABLE, null, null, null, null, null, null);
             while (cursor.moveToNext()) {
-                int titleIndex = cursor.getColumnIndexOrThrow( DatabaseDAO.COLUMN_TITLE );
-                int descriptionIndex = cursor.getColumnIndexOrThrow( DatabaseDAO.COLUMN_DESCRIPTION );
-                int isFavoriteIndex = cursor.getColumnIndexOrThrow( DatabaseDAO.COLUMN_IS_FAVORITE );
-                int idIndex = cursor.getColumnIndexOrThrow( DatabaseDAO.COLUMN_ID );
+                int titleIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_TITLE);
+                int descriptionIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_DESCRIPTION);
+                int isFavoriteIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_IS_FAVORITE);
+                int idIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_ID);
                 String title = cursor.getString(titleIndex);
                 String description = cursor.getString(descriptionIndex);
                 boolean isFavorite = cursor.getInt(isFavoriteIndex) == 1;
                 String id = cursor.getString(idIndex);
-                tasks.add( new Task( title, description, isFavorite, id ) );
+                tasks.add(new Task(title, description, isFavorite, id));
             }
-        } catch ( RuntimeException exception ){
-            throw new DatabaseLoadException( DB_DOWNLOAD_EXCEPTION );
+        } catch (RuntimeException exception) {
+            throw new DatabaseLoadException(DB_DOWNLOAD_EXCEPTION);
         }
 
-            return tasks;
+        return tasks;
     }
 
     @Override
     public void delete(Task task) {
-        try{
-            database.delete( DB_TABLE, COLUMN_ID + "=?", new String[] {task.getId()} );
-        } catch ( RuntimeException exception ){
+        try {
+            database.delete(DB_TABLE, COLUMN_ID + "=?", new String[]{task.getId()});
+        } catch (RuntimeException exception) {
             throw new DatabaseLoadException(DB_DOWNLOAD_EXCEPTION);
         }
     }
 
     private class DBHelper extends SQLiteOpenHelper {
 
-        private DBHelper( Context context, String name, SQLiteDatabase.CursorFactory factory,
-                        int version ) {
+        private DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
+                         int version) {
             super(context, name, factory, version);
         }
 

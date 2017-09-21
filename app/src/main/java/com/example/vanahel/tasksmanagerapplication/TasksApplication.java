@@ -25,34 +25,34 @@ public class TasksApplication extends Application {
         Firebase.setAndroidContext(this);
         FirebaseMessaging.getInstance().subscribeToTopic("tasks");
 
-        if(!FirebaseApp.getApps(this).isEmpty()) {
+        if (!FirebaseApp.getApps(this).isEmpty()) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String settingsPreferences = sharedPreferences.getString("listPref", null);
-        if ( settingsPreferences !=null ) {
+        if (settingsPreferences != null) {
             switch (settingsPreferences) {
                 case SettingsConstants.SHARED_PREFERENCES:
-                    DAOManager.getInstance().setTaskDAO( new SharedPreferencesDAO(this) );
+                    DAOManager.getInstance().setTaskDAO(new SharedPreferencesDAO(this));
                     break;
                 case SettingsConstants.DATABASE:
-                    DAOManager.getInstance().setTaskDAO( new DatabaseDAO(this) );
+                    DAOManager.getInstance().setTaskDAO(new DatabaseDAO(this));
                     break;
                 case SettingsConstants.INTERNAL_STORAGE:
-                    DAOManager.getInstance().setTaskDAO( new InternalStorageDAO(this) );
+                    DAOManager.getInstance().setTaskDAO(new InternalStorageDAO(this));
                     break;
                 case SettingsConstants.EXTERNAL_STORAGE:
-                    DAOManager.getInstance().setTaskDAO( new ExternalStorageDAO() );
+                    DAOManager.getInstance().setTaskDAO(new ExternalStorageDAO());
                     break;
                 case SettingsConstants.MEMORY:
-                    DAOManager.getInstance().setTaskDAO( new MemoryDAO() );
+                    DAOManager.getInstance().setTaskDAO(new MemoryDAO());
                     break;
                 case SettingsConstants.INTERNET:
-                    DAOManager.getInstance().setTaskDAO( new InternetDAO() );
+                    DAOManager.getInstance().setTaskDAO(new InternetDAO());
                     break;
             }
         } else {
-            DAOManager.getInstance().setTaskDAO( new DatabaseDAO(this)) ;
+            DAOManager.getInstance().setTaskDAO(new DatabaseDAO(this));
         }
     }
 }

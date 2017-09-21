@@ -12,11 +12,11 @@ public class TasksFirebaseInstanceIdService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d( TAG, "Refreshed token: " + refreshedToken );
+        Log.d(TAG, "Refreshed token: " + refreshedToken);
 
-        sendRegistrationToServer( refreshedToken );
+        sendRegistrationToServer(refreshedToken);
     }
 
-    private void sendRegistrationToServer( String token ) {
+    private void sendRegistrationToServer(String token) {
     }
 }

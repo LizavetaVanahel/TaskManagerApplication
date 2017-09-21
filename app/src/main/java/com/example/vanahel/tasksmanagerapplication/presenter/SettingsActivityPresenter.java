@@ -17,13 +17,13 @@ public class SettingsActivityPresenter implements SettingsActivityContract.Prese
 
     private Context context;
 
-    public SettingsActivityPresenter ( Context context){
+    public SettingsActivityPresenter(Context context) {
         this.context = context;
     }
 
     @Override
-    public void onTaskSettingsChanged( Object object, TaskDAO taskDAO ) {
-        switch ( object.toString() ) {
+    public void onTaskSettingsChanged(Object object, TaskDAO taskDAO) {
+        switch (object.toString()) {
             case SettingsConstants.SHARED_PREFERENCES:
                 taskDAO = new SharedPreferencesDAO(context);
                 DAOManager.getInstance().setTaskDAO(taskDAO);
@@ -44,7 +44,7 @@ public class SettingsActivityPresenter implements SettingsActivityContract.Prese
                 taskDAO = new MemoryDAO();
                 DAOManager.getInstance().setTaskDAO(taskDAO);
                 break;
-            case  SettingsConstants.INTERNET:
+            case SettingsConstants.INTERNET:
                 taskDAO = new InternetDAO();
                 DAOManager.getInstance().setTaskDAO(taskDAO);
         }

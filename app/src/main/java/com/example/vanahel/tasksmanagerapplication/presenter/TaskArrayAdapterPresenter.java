@@ -33,11 +33,11 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
     @Override
     public void onMenuButtonClicked(View view) {
         Button menuButton = (Button) view.findViewById(R.id.list_item_menu_button);
-        PopupMenu popup = new PopupMenu( activity, menuButton );
+        PopupMenu popup = new PopupMenu(activity, menuButton);
         if (!task.getFavorite()) {
-            popup.getMenuInflater().inflate( R.menu.popupmenu, popup.getMenu() );
+            popup.getMenuInflater().inflate(R.menu.popupmenu, popup.getMenu());
         } else {
-            popup.getMenuInflater().inflate( R.menu.favorite_popupmenu, popup.getMenu() );
+            popup.getMenuInflater().inflate(R.menu.favorite_popupmenu, popup.getMenu());
         }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -68,7 +68,7 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
 
     @Override
     public void edit() {
-        listItemMenuContextProvider.callStartActivityForResult( activity, task );
+        listItemMenuContextProvider.callStartActivityForResult(activity, task);
     }
 
     @Override
@@ -83,9 +83,9 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
 
     @Override
     public void addToFavorite() {
-        Task favoriteTask = new Task( task.getTitle(), task.getDescription(), true, task.getId() );
+        Task favoriteTask = new Task(task.getTitle(), task.getDescription(), true, task.getId());
         try {
-            DAOManager.getInstance().getTaskDAO().updateTask( favoriteTask, task );
+            DAOManager.getInstance().getTaskDAO().updateTask(favoriteTask, task);
         } catch (IOException e) {
         }
         listItemMenuContextProvider.callFragmentOnResume(fragment);
@@ -93,7 +93,7 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
 
     @Override
     public void removeFromFavorite() {
-        Task simpleTask = new Task( task.getTitle(), task.getDescription(), false, task.getId() );
+        Task simpleTask = new Task(task.getTitle(), task.getDescription(), false, task.getId());
         try {
             DAOManager.getInstance().getTaskDAO().updateTask(simpleTask, task);
         } catch (IOException e) {
@@ -104,7 +104,7 @@ public class TaskArrayAdapterPresenter implements TaskArrayAdapterContract.Prese
 
     @Override
     public void share() {
-        listItemMenuContextProvider.callStartActivityForResultFragment( activity, task );
+        listItemMenuContextProvider.callStartActivityForResultFragment(activity, task);
     }
 
 }
