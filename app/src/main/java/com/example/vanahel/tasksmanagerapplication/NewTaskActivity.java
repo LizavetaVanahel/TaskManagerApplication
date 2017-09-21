@@ -1,72 +1,108 @@
 package com.example.vanahel.tasksmanagerapplication;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.vanahel.tasksmanagerapplication.constants.ExtrasConstants;
-import com.example.vanahel.tasksmanagerapplication.dao.DAOManager;
+import com.example.vanahel.tasksmanagerapplication.contracts.NewTaskActivityContract;
+import com.example.vanahel.tasksmanagerapplication.presenter.NewTaskActivityPresenter;
+import com.example.vanahel.tasksmanagerapplication.services.firebase.TasksFireBaseMessagingService;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
+import com.example.vanahel.tasksmanagerapplication.util.screenshot.ScreenshotProvider;
 
-import java.io.IOException;
-import java.util.UUID;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class NewTaskActivity extends ActionBarActivity {
+public class NewTaskActivity extends AppCompatActivity implements NewTaskActivityContract.View {
 
+    @BindView(R.id.save_button)
+    Button saveButton;
+    @BindView(R.id.title_et)
+    EditText title;
+    @BindView(R.id.description_et)
+    EditText description;
+    @BindView(R.id.coordinator)
+    CoordinatorLayout coordinatorLayout;
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String titleContent = intent.getStringExtra("title");
+            String descriptionContent = intent.getStringExtra("description");
+            title.setText(titleContent);
+            title.setSelection(title.getText().length());
+            description.setText(descriptionContent);
+            description.setSelection(description.getText().length());
+        }
+    };
     private Task task;
-    private Boolean savedIsFavorite;
-    private String savedId;
+    private NewTaskActivityPresenter presenter;
+    private ScreenshotProvider screenshotProvider;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
+        ButterKnife.bind(this);
 
-        final Button saveButton = (Button) findViewById(R.id.save_button);
-        final EditText title = (EditText) findViewById(R.id.title_et);
-        final EditText description = (EditText) findViewById(R.id.description_et);
+//        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator);
+        presenter = new NewTaskActivityPresenter(this);
+        screenshotProvider = new ScreenshotProvider(this);
 
         try {
-            task = getIntent().getParcelableExtra(ExtrasConstants.TASK_EXTRAS);
-            String savedTitle = task.getTitle();
-            String savedDescription = task.getDescription();
-            savedIsFavorite = task.getFavorite();
-            savedId = task.getId();
-            title.setText(savedTitle);
-            title.setSelection(title.getText().length());
-            description.setText(savedDescription);
-            description.setSelection(description.getText().length());
+            task = getTask();
+            setTask(task);
         } catch (Exception e) {
-            System.out.println("The fields are empty");
+            Log.d("Empty field", "The fields are empty");
+
         }
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String enteredTitle = title.getText().toString();
-                String enteredDescription = description.getText().toString();
-                Intent intent = new Intent(NewTaskActivity.this, MainActivity.class);
-                if (getIntent().hasExtra(ExtrasConstants.TASK_EXTRAS)) {
-                    try {
-                        DAOManager.getInstance().getTaskDAO().updateTask
-                                (new Task(enteredTitle, enteredDescription, savedIsFavorite, savedId), task);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivityForResult(intent, 0);
-                } else {
-                    boolean isTabFavorite = getIntent().getBooleanExtra(ExtrasConstants.TAB_EXTRAS, false);
-                        DAOManager.getInstance().getTaskDAO().save(new Task(enteredTitle,
-                                enteredDescription, isTabFavorite, UUID.randomUUID().toString()));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivityForResult(intent, 0);
-                }
+                presenter.onSaveButtonCLicked(task);
+                String message = presenter.sendExceptionMessage();
+                showExceptionMessage(message);
+
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent().hasExtra("brodcastreceiver")) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+                    new IntentFilter(TasksFireBaseMessagingService.INTENT_FILTER));
+            broadcastReceiver.onReceive(this, getIntent());
+        } else if (getIntent().hasExtra("screenshot")) {
+            screenshotProvider.takeScreenshotShare();
+        }
+    }
+
+    @Override
+    public Task getTask() {
+        return presenter.getTask();
+    }
+
+    @Override
+    public void setTask(Task task) {
+        presenter.setTask(task);
+    }
+
+    @Override
+    public void showExceptionMessage(String message) {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT);
+        snackbar.show();
     }
 }
 

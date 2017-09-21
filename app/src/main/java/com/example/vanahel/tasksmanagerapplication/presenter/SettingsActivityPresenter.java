@@ -1,31 +1,29 @@
-package com.example.vanahel.tasksmanagerapplication.event.listener;
+package com.example.vanahel.tasksmanagerapplication.presenter;
 
 import android.content.Context;
-import android.preference.Preference;
 
 import com.example.vanahel.tasksmanagerapplication.constants.SettingsConstants;
+import com.example.vanahel.tasksmanagerapplication.contracts.SettingsActivityContract;
 import com.example.vanahel.tasksmanagerapplication.dao.DAOManager;
 import com.example.vanahel.tasksmanagerapplication.dao.DatabaseDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.ExternalStorageDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.InternalStorageDAO;
+import com.example.vanahel.tasksmanagerapplication.dao.InternetDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.MemoryDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.SharedPreferencesDAO;
 import com.example.vanahel.tasksmanagerapplication.dao.TaskDAO;
 
-
-public class TaskSettingsChangeListener implements Preference.OnPreferenceChangeListener {
+public class SettingsActivityPresenter implements SettingsActivityContract.Presenter {
 
     private Context context;
-    private TaskDAO taskDAO;
 
-    public TaskSettingsChangeListener (Context context, TaskDAO taskDAO){
+    public SettingsActivityPresenter(Context context) {
         this.context = context;
-        this.taskDAO = taskDAO;
     }
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object o) {
-        switch (o.toString()) {
+    public void onTaskSettingsChanged(Object object, TaskDAO taskDAO) {
+        switch (object.toString()) {
             case SettingsConstants.SHARED_PREFERENCES:
                 taskDAO = new SharedPreferencesDAO(context);
                 DAOManager.getInstance().setTaskDAO(taskDAO);
@@ -46,10 +44,9 @@ public class TaskSettingsChangeListener implements Preference.OnPreferenceChange
                 taskDAO = new MemoryDAO();
                 DAOManager.getInstance().setTaskDAO(taskDAO);
                 break;
-
+            case SettingsConstants.INTERNET:
+                taskDAO = new InternetDAO();
+                DAOManager.getInstance().setTaskDAO(taskDAO);
         }
-        return true;
-
     }
-
 }

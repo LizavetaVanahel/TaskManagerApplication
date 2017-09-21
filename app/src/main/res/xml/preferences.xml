@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="From">
+    <PreferenceCategory android:title="From">
         <ListPreference
-            android:title="STORAGE"
-            android:key="listPref"
             android:entries="@array/listArray"
-            android:entryValues="@array/taskStorageData" />
+            android:entryValues="@array/taskStorageData"
+            android:key="listPref"
+            android:title="STORAGE" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -3,12 +3,10 @@ package com.example.vanahel.tasksmanagerapplication.task;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Task implements Parcelable {
 
-    private String title;
-    private String description;
-    private boolean isFavorite;
-    private String id;
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
 
         public Task createFromParcel(Parcel in) {
@@ -19,16 +17,23 @@ public class Task implements Parcelable {
             return new Task[size];
         }
     };
+    private String title;
+    private String description;
+    private boolean isFavorite;
+    private String id;
 
+    public Task() {
 
-    public Task (String title, String description, boolean isFavorite, String id){
+    }
+
+    public Task(String title, String description, boolean isFavorite, String id) {
         this.title = title;
         this.description = description;
         this.isFavorite = isFavorite;
         this.id = id;
     }
 
-    private Task (Parcel in){
+    private Task(Parcel in) {
         title = in.readString();
         description = in.readString();
         isFavorite = Boolean.parseBoolean(String.valueOf(in.readInt()));
@@ -39,12 +44,12 @@ public class Task implements Parcelable {
         return title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
@@ -55,12 +60,13 @@ public class Task implements Parcelable {
         return isFavorite;
     }
 
-    public Integer getFavoriteAsInt() {
-        return isFavorite ? 1 : 0;
-    }
-
     public void setFavorite(Boolean favorite) {
         isFavorite = favorite;
+    }
+
+    @JsonIgnore
+    public Integer getFavoriteAsInt() {
+        return isFavorite ? 1 : 0;
     }
 
     public String getId() {

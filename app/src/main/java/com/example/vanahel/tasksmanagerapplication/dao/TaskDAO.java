@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface TaskDAO {
 
-     void save(Task task);
+    void save(Task task);
 
-     List<Task> getTasks ();
+    List<Task> getTasks();
 
-     List<Task> getFavoriteTasks ();
+    List<Task> getFavoriteTasks();
 
-     void delete (Task task) throws IOException;
+    void delete(Task task) throws IOException;
 
-     void updateTask ( Task newTask,Task oldTask ) throws IOException;
+    void updateTask(Task newTask, Task oldTask) throws IOException;
 
 }

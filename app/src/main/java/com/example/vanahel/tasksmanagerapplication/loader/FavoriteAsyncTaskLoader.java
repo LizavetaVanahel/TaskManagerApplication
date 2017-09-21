@@ -1,14 +1,14 @@
 package com.example.vanahel.tasksmanagerapplication.loader;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.support.v4.content.AsyncTaskLoader;
 
 import com.example.vanahel.tasksmanagerapplication.dao.TaskDAO;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
 import java.util.List;
 
-public class FavoriteAsyncTaskLoader extends AsyncTaskLoader< List<Task> > {
+public class FavoriteAsyncTaskLoader extends AsyncTaskLoader<AsyncTaskResult<List<Task>>> {
 
     private TaskDAO taskDAO;
 
@@ -18,7 +18,15 @@ public class FavoriteAsyncTaskLoader extends AsyncTaskLoader< List<Task> > {
     }
 
     @Override
-    public List<Task> loadInBackground() {
-        return taskDAO.getFavoriteTasks();
+    public AsyncTaskResult<List<Task>> loadInBackground() {
+        AsyncTaskResult<List<Task>> resultWrapper = new AsyncTaskResult<>();
+        try {
+            resultWrapper.setResult(taskDAO.getFavoriteTasks());
+        } catch (RuntimeException error) {
+            resultWrapper.setError(error);
+        }
+
+        return resultWrapper;
     }
 }
+

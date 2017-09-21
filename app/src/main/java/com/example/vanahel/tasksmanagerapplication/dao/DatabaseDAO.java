@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.vanahel.tasksmanagerapplication.exception.DatabaseLoadException;
 import com.example.vanahel.tasksmanagerapplication.task.Task;
 
 import java.util.LinkedList;
@@ -13,6 +14,8 @@ import java.util.List;
 
 public class DatabaseDAO implements TaskDAO {
 
+    private static final String DB_DOWNLOAD_EXCEPTION = "failed to download data from Database";
+    private static final String DB_SAVE_EXCEPTION = "failed to save data to Database";
     private static final String DB_NAME = "Task";
     private static final int DB_VERSION = 1;
     private static final String DB_TABLE = "TaskTable";
@@ -27,7 +30,7 @@ public class DatabaseDAO implements TaskDAO {
                     COLUMN_ID + " STRING PRIMARY KEY, " +
                     COLUMN_TITLE + " TEXT, " +
                     COLUMN_DESCRIPTION + " TEXT, " +
-                    COLUMN_IS_FAVORITE +  " INTEGER);";
+                    COLUMN_IS_FAVORITE + " INTEGER);";
 
     private Context context;
     private DBHelper dbHelper;
@@ -43,34 +46,47 @@ public class DatabaseDAO implements TaskDAO {
         this.database = dbHelper.getWritableDatabase();
     }
 
-    public void close() {
-        if ( dbHelper !=null ) dbHelper.close();
+    private void close() {
+        if (dbHelper != null) dbHelper.close();
     }
 
-    public void updateTask ( Task newTask, Task oldTask ){
+    @Override
+    public void updateTask(Task newTask, Task oldTask) {
         ContentValues cv = new ContentValues();
-        cv.put( COLUMN_TITLE, newTask.getTitle() );
-        cv.put( COLUMN_DESCRIPTION, newTask.getDescription() );
-        cv.put( COLUMN_IS_FAVORITE, newTask.getFavoriteAsInt() );
-        cv.put( COLUMN_ID, newTask.getId() );
+        try {
+            cv.put(COLUMN_TITLE, newTask.getTitle());
+            cv.put(COLUMN_DESCRIPTION, newTask.getDescription());
+            cv.put(COLUMN_IS_FAVORITE, newTask.getFavoriteAsInt());
+            cv.put(COLUMN_ID, newTask.getId());
 
-        int affectedRows = database.update( DB_TABLE, cv, COLUMN_ID + "=?", new String[] {oldTask.getId()} );
-        System.out.print("SQL update method. Rows affected: " + affectedRows);
+            int affectedRows = database.update(DB_TABLE, cv, COLUMN_ID + "=?",
+                    new String[]{oldTask.getId()});
+            System.out.print("SQL update method. Rows affected: " + affectedRows);
+        } catch (RuntimeException exception) {
+            throw new DatabaseLoadException(DB_SAVE_EXCEPTION);
+        }
     }
 
+    @Override
     public void save(Task task) {
+//        throw new DatabaseLoadException("OLOLOLO....we have some problems!");
         ContentValues cv = new ContentValues();
-        cv.put( COLUMN_TITLE, task.getTitle() );
-        cv.put( COLUMN_DESCRIPTION, task.getDescription() );
-        cv.put( COLUMN_IS_FAVORITE, task.getFavoriteAsInt() );
-        cv.put( COLUMN_ID, task.getId() );
-        database.insert(DB_TABLE, null, cv);
+        try {
+            cv.put(COLUMN_TITLE, task.getTitle());
+            cv.put(COLUMN_DESCRIPTION, task.getDescription());
+            cv.put(COLUMN_IS_FAVORITE, task.getFavoriteAsInt());
+            cv.put(COLUMN_ID, task.getId());
+            database.insert(DB_TABLE, null, cv);
+        } catch (RuntimeException exception) {
+            throw new DatabaseLoadException(DB_SAVE_EXCEPTION);
+        }
     }
 
-    public List<Task> getFavoriteTasks () {
-        try ( Cursor cursor = database.rawQuery("SELECT * FROM " + DB_TABLE + " WHERE "
-                + COLUMN_IS_FAVORITE + "=?", new String[]{"1"}) ){
-            List tasks = new LinkedList();
+    @Override
+    public List<Task> getFavoriteTasks() {
+        List tasks = new LinkedList();
+        try (Cursor cursor = database.rawQuery("SELECT * FROM " + DB_TABLE + " WHERE "
+                + COLUMN_IS_FAVORITE + "=?", new String[]{"1"})) {
             while (cursor.moveToNext()) {
                 int titleIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_TITLE);
                 int descriptionIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_DESCRIPTION);
@@ -82,14 +98,19 @@ public class DatabaseDAO implements TaskDAO {
                 String id = cursor.getString(idIndex);
                 tasks.add(new Task(title, description, isFavorite, id));
             }
-            return tasks;
+        } catch (RuntimeException exception) {
+            throw new DatabaseLoadException(DB_DOWNLOAD_EXCEPTION);
         }
+
+        return tasks;
     }
 
     @Override
     public List<Task> getTasks() {
-        try ( Cursor cursor = database.query(DB_TABLE, null, null, null, null, null, null) ) {
-            List tasks = new LinkedList();
+//        throw new DatabaseLoadException("OLOLOLO....we have some problems!");
+        List tasks = new LinkedList();
+        try {
+            Cursor cursor = database.query(DB_TABLE, null, null, null, null, null, null);
             while (cursor.moveToNext()) {
                 int titleIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_TITLE);
                 int descriptionIndex = cursor.getColumnIndexOrThrow(DatabaseDAO.COLUMN_DESCRIPTION);
@@ -101,18 +122,26 @@ public class DatabaseDAO implements TaskDAO {
                 String id = cursor.getString(idIndex);
                 tasks.add(new Task(title, description, isFavorite, id));
             }
-            return tasks;
+        } catch (RuntimeException exception) {
+            throw new DatabaseLoadException(DB_DOWNLOAD_EXCEPTION);
         }
+
+        return tasks;
     }
 
+    @Override
     public void delete(Task task) {
-        database.delete( DB_TABLE, COLUMN_ID + "=?", new String[] {task.getId()} );
+        try {
+            database.delete(DB_TABLE, COLUMN_ID + "=?", new String[]{task.getId()});
+        } catch (RuntimeException exception) {
+            throw new DatabaseLoadException(DB_DOWNLOAD_EXCEPTION);
+        }
     }
 
     private class DBHelper extends SQLiteOpenHelper {
 
-        private DBHelper( Context context, String name, SQLiteDatabase.CursorFactory factory,
-                        int version ) {
+        private DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
+                         int version) {
             super(context, name, factory, version);
         }
 
