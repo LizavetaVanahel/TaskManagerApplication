@@ -45,9 +45,6 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-
         tabLayout.addTab( tabLayout.newTab().setText("All") );
         tabLayout.addTab( tabLayout.newTab().setText("Favorite") );
 
@@ -87,7 +84,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onTabSelected( TabLayout.Tab tab ) {
         viewPager.setCurrentItem( tab.getPosition() );
-        viewPagerAdapter.getCurrentFragment().onResume();
+        if (viewPagerAdapter.getCurrentFragment() != null ) {
+            viewPagerAdapter.getCurrentFragment().onResume();
+        }
 
     }
 
@@ -104,8 +103,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult( int requestCode, int resultCode, Intent data ) {
         super.onActivityResult( requestCode, resultCode, data );
-        if ( resultCode == RESULT_OK ){
-            viewPagerAdapter.getCurrentFragment().onResume();
+        if ( resultCode == RESULT_OK ) {
+            if (viewPagerAdapter.getCurrentFragment() != null) {
+                viewPagerAdapter.getCurrentFragment().onResume();
+            }
         }
     }
 }

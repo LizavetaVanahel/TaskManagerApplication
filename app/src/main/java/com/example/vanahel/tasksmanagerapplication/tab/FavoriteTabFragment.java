@@ -39,9 +39,9 @@ public class FavoriteTabFragment extends Fragment implements TabFragmentContract
         ButterKnife.bind( this, view );
         favoriteTaskArrayAdapter = new TasksArrayAdapter(getActivity(), FavoriteTabFragment.this);
         TaskDAO taskDAO = DAOManager.getInstance().getTaskDAO();
+        presenter = new TabFragmentPresenter( getActivity(), this );
         asyncTaskLoaderCallbacks = new FavoriteAsyncTasksLoaderCallbacks( getActivity(),
                 taskDAO, favoriteTaskArrayAdapter, presenter );
-        presenter = new TabFragmentPresenter( getActivity(), this );
         favoriteTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
